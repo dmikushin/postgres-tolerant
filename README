@@ -1,8 +1,22 @@
-PostgreSQL Database Management System
-=====================================
+Error-tolerant version of PostgreSQL Database Management System
+===============================================================
 
-This directory contains the source code distribution of the PostgreSQL
-database management system.
+This is a special version of PostgreSQL database management system,
+which is made tolerant to database errors, due to disk errors created
+by power outage. Unlike the reference, this version does not give up
+in case of a missing attribute or data block corruption, and still tries
+to recover as much data as possible and minimize the damages.
+
+Compile and run this version as you would usually do:
+
+    CFLAGS="-O0" ../configure --enable-debug --prefix=(pwd)/../install --with-lz4
+    make -j12 && make install
+    ../install/bin/postgres -O -P -D (pwd)/../../data/ -c log_error_verbosity=verbose
+
+Now perform the tables content dumping. You may see different warnings,
+but the healthy rows will still be retrieved:
+
+    ../install/bin/pg_dump --column-inserts --data-only --table=tblname -U user dbname >../../data/dump.sql
 
 PostgreSQL is an advanced object-relational database management system
 that supports an extended subset of the SQL standard, including
