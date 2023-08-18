@@ -1094,7 +1094,7 @@ GetAttributeByNum(HeapTupleHeader tuple,
 	HeapTupleData tmptup;
 
 	if (!AttributeNumberIsValid(attrno))
-		elog(ERROR, "invalid attribute number %d", attrno);
+		elog(WARNING, "invalid attribute number %d", attrno);
 
 	if (isNull == NULL)
 		elog(ERROR, "a NULL isNull pointer was passed");

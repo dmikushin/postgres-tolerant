@@ -105,7 +105,7 @@ plsample_func_handler(PG_FUNCTION_ARGS)
 	pl_tuple = SearchSysCache(PROCOID,
 							  ObjectIdGetDatum(fcinfo->flinfo->fn_oid), 0, 0, 0);
 	if (!HeapTupleIsValid(pl_tuple))
-		elog(ERROR, "cache lookup failed for function %u",
+		elog(WARNING, "cache lookup failed for function %u",
 			 fcinfo->flinfo->fn_oid);
 
 	/*
@@ -145,7 +145,7 @@ plsample_func_handler(PG_FUNCTION_ARGS)
 
 		type_tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(argtype));
 		if (!HeapTupleIsValid(type_tuple))
-			elog(ERROR, "cache lookup failed for type %u", argtype);
+			elog(WARNING, "cache lookup failed for type %u", argtype);
 
 		type_struct = (Form_pg_type) GETSTRUCT(type_tuple);
 		fmgr_info_cxt(type_struct->typoutput, &(arg_out_func[i]), proc_cxt);
@@ -175,7 +175,7 @@ plsample_func_handler(PG_FUNCTION_ARGS)
 	type_tuple = SearchSysCache1(TYPEOID,
 								 ObjectIdGetDatum(prorettype));
 	if (!HeapTupleIsValid(type_tuple))
-		elog(ERROR, "cache lookup failed for type %u", prorettype);
+		elog(WARNING, "cache lookup failed for type %u", prorettype);
 	pg_type_entry = (Form_pg_type) GETSTRUCT(type_tuple);
 	result_typioparam = getTypeIOParam(type_tuple);
 

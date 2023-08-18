@@ -491,7 +491,7 @@ RemovePublicationRelById(Oid proid)
 	tup = SearchSysCache1(PUBLICATIONREL, ObjectIdGetDatum(proid));
 
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for publication table %u",
+		elog(WARNING, "cache lookup failed for publication table %u",
 			 proid);
 
 	pubrel = (Form_pg_publication_rel) GETSTRUCT(tup);
@@ -530,7 +530,7 @@ RemovePublicationById(Oid pubid)
 
 	tup = SearchSysCache1(PUBLICATIONOID, ObjectIdGetDatum(pubid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for publication %u", pubid);
+		elog(WARNING, "cache lookup failed for publication %u", pubid);
 
 	pubform = (Form_pg_publication) GETSTRUCT(tup);
 

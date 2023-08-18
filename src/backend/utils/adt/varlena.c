@@ -5276,7 +5276,7 @@ pg_column_size(PG_FUNCTION_ARGS)
 
 		typlen = get_typlen(argtypeid);
 		if (typlen == 0)		/* should not happen */
-			elog(ERROR, "cache lookup failed for type %u", argtypeid);
+			elog(WARNING, "cache lookup failed for type %u", argtypeid);
 
 		fcinfo->flinfo->fn_extra = MemoryContextAlloc(fcinfo->flinfo->fn_mcxt,
 													  sizeof(int));
@@ -5323,7 +5323,7 @@ pg_column_compression(PG_FUNCTION_ARGS)
 
 		typlen = get_typlen(argtypeid);
 		if (typlen == 0)		/* should not happen */
-			elog(ERROR, "cache lookup failed for type %u", argtypeid);
+			elog(WARNING, "cache lookup failed for type %u", argtypeid);
 
 		fcinfo->flinfo->fn_extra = MemoryContextAlloc(fcinfo->flinfo->fn_mcxt,
 													  sizeof(int));

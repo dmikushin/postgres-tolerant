@@ -57,7 +57,7 @@ GetForeignDataWrapperExtended(Oid fdwid, bits16 flags)
 	if (!HeapTupleIsValid(tp))
 	{
 		if ((flags & FDW_MISSING_OK) == 0)
-			elog(ERROR, "cache lookup failed for foreign-data wrapper %u", fdwid);
+			elog(WARNING, "cache lookup failed for foreign-data wrapper %u", fdwid);
 		return NULL;
 	}
 
@@ -131,7 +131,7 @@ GetForeignServerExtended(Oid serverid, bits16 flags)
 	if (!HeapTupleIsValid(tp))
 	{
 		if ((flags & FSV_MISSING_OK) == 0)
-			elog(ERROR, "cache lookup failed for foreign server %u", serverid);
+			elog(WARNING, "cache lookup failed for foreign server %u", serverid);
 		return NULL;
 	}
 
@@ -255,7 +255,7 @@ GetForeignTable(Oid relid)
 
 	tp = SearchSysCache1(FOREIGNTABLEREL, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for foreign table %u", relid);
+		elog(WARNING, "cache lookup failed for foreign table %u", relid);
 	tableform = (Form_pg_foreign_table) GETSTRUCT(tp);
 
 	ft = (ForeignTable *) palloc(sizeof(ForeignTable));
@@ -294,7 +294,7 @@ GetForeignColumnOptions(Oid relid, AttrNumber attnum)
 						 ObjectIdGetDatum(relid),
 						 Int16GetDatum(attnum));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+		elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 			 attnum, relid);
 	datum = SysCacheGetAttr(ATTNUM,
 							tp,
@@ -345,7 +345,7 @@ GetForeignServerIdByRelId(Oid relid)
 
 	tp = SearchSysCache1(FOREIGNTABLEREL, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for foreign table %u", relid);
+		elog(WARNING, "cache lookup failed for foreign table %u", relid);
 	tableform = (Form_pg_foreign_table) GETSTRUCT(tp);
 	serverid = tableform->ftserver;
 	ReleaseSysCache(tp);
@@ -370,7 +370,7 @@ GetFdwRoutineByServerId(Oid serverid)
 	/* Get foreign-data wrapper OID for the server. */
 	tp = SearchSysCache1(FOREIGNSERVEROID, ObjectIdGetDatum(serverid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for foreign server %u", serverid);
+		elog(WARNING, "cache lookup failed for foreign server %u", serverid);
 	serverform = (Form_pg_foreign_server) GETSTRUCT(tp);
 	fdwid = serverform->srvfdw;
 	ReleaseSysCache(tp);
@@ -378,7 +378,7 @@ GetFdwRoutineByServerId(Oid serverid)
 	/* Get handler function OID for the FDW. */
 	tp = SearchSysCache1(FOREIGNDATAWRAPPEROID, ObjectIdGetDatum(fdwid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for foreign-data wrapper %u", fdwid);
+		elog(WARNING, "cache lookup failed for foreign-data wrapper %u", fdwid);
 	fdwform = (Form_pg_foreign_data_wrapper) GETSTRUCT(tp);
 	fdwhandler = fdwform->fdwhandler;
 

@@ -65,7 +65,7 @@ GetIndexAmRoutineByAmId(Oid amoid, bool noerror)
 	{
 		if (noerror)
 			return NULL;
-		elog(ERROR, "cache lookup failed for access method %u",
+		elog(WARNING, "cache lookup failed for access method %u",
 			 amoid);
 	}
 	amform = (Form_pg_am) GETSTRUCT(tuple);
@@ -122,7 +122,7 @@ amvalidate(PG_FUNCTION_ARGS)
 
 	classtup = SearchSysCache1(CLAOID, ObjectIdGetDatum(opclassoid));
 	if (!HeapTupleIsValid(classtup))
-		elog(ERROR, "cache lookup failed for operator class %u", opclassoid);
+		elog(WARNING, "cache lookup failed for operator class %u", opclassoid);
 	classform = (Form_pg_opclass) GETSTRUCT(classtup);
 
 	amoid = classform->opcmethod;

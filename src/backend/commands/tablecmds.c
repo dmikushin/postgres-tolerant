@@ -3195,7 +3195,7 @@ SetRelationHasSubclass(Oid relationId, bool relhassubclass)
 	relationRelation = table_open(RelationRelationId, RowExclusiveLock);
 	tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relationId));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relationId);
+		elog(WARNING, "cache lookup failed for relation %u", relationId);
 	classtuple = (Form_pg_class) GETSTRUCT(tuple);
 
 	if (classtuple->relhassubclass != relhassubclass)
@@ -3297,7 +3297,7 @@ SetRelationTableSpace(Relation rel,
 
 	tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(reloid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", reloid);
+		elog(WARNING, "cache lookup failed for relation %u", reloid);
 	rd_rel = (Form_pg_class) GETSTRUCT(tuple);
 
 	/* Update the pg_class row. */
@@ -3609,7 +3609,7 @@ rename_constraint_internal(Oid myrelid,
 
 	tuple = SearchSysCache1(CONSTROID, ObjectIdGetDatum(constraintOid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for constraint %u",
+		elog(WARNING, "cache lookup failed for constraint %u",
 			 constraintOid);
 	con = (Form_pg_constraint) GETSTRUCT(tuple);
 
@@ -3694,7 +3694,7 @@ RenameConstraint(RenameStmt *stmt)
 		rel = table_open(TypeRelationId, RowExclusiveLock);
 		tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typid));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for type %u", typid);
+			elog(WARNING, "cache lookup failed for type %u", typid);
 		checkDomainOwner(tup);
 		ReleaseSysCache(tup);
 		table_close(rel, NoLock);
@@ -3823,7 +3823,7 @@ RenameRelationInternal(Oid myrelid, const char *newrelname, bool is_internal, bo
 
 	reltup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(myrelid));
 	if (!HeapTupleIsValid(reltup))	/* shouldn't happen */
-		elog(ERROR, "cache lookup failed for relation %u", myrelid);
+		elog(WARNING, "cache lookup failed for relation %u", myrelid);
 	relform = (Form_pg_class) GETSTRUCT(reltup);
 
 	if (get_relname_relid(newrelname, namespaceId) != InvalidOid)
@@ -3898,7 +3898,7 @@ ResetRelRewrite(Oid myrelid)
 
 	reltup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(myrelid));
 	if (!HeapTupleIsValid(reltup))	/* shouldn't happen */
-		elog(ERROR, "cache lookup failed for relation %u", myrelid);
+		elog(WARNING, "cache lookup failed for relation %u", myrelid);
 	relform = (Form_pg_class) GETSTRUCT(reltup);
 
 	/*
@@ -6584,7 +6584,7 @@ ATExecAddColumn(List **wqueue, AlteredTableInfo *tab, Relation rel,
 
 	reltup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(myrelid));
 	if (!HeapTupleIsValid(reltup))
-		elog(ERROR, "cache lookup failed for relation %u", myrelid);
+		elog(WARNING, "cache lookup failed for relation %u", myrelid);
 	relkind = ((Form_pg_class) GETSTRUCT(reltup))->relkind;
 
 	/* Determine the new attribute's number */
@@ -7037,7 +7037,7 @@ ATExecDropNotNull(Relation rel, const char *colName, LOCKMODE lockmode)
 
 		indexTuple = SearchSysCache1(INDEXRELID, ObjectIdGetDatum(indexoid));
 		if (!HeapTupleIsValid(indexTuple))
-			elog(ERROR, "cache lookup failed for index %u", indexoid);
+			elog(WARNING, "cache lookup failed for index %u", indexoid);
 		indexStruct = (Form_pg_index) GETSTRUCT(indexTuple);
 
 		/* If the index is not a primary key, skip the check */
@@ -8315,7 +8315,7 @@ ATExecDropColumn(List **wqueue, Relation rel, const char *colName,
 
 			tuple = SearchSysCacheCopyAttName(childrelid, colName);
 			if (!HeapTupleIsValid(tuple))	/* shouldn't happen */
-				elog(ERROR, "cache lookup failed for attribute \"%s\" of relation %u",
+				elog(WARNING, "cache lookup failed for attribute \"%s\" of relation %u",
 					 colName, childrelid);
 			childatt = (Form_pg_attribute) GETSTRUCT(tuple);
 
@@ -9035,7 +9035,7 @@ ATAddForeignKeyConstraint(List **wqueue, AlteredTableInfo *tab, Relation rel,
 		/* We need several fields out of the pg_opclass entry */
 		cla_ht = SearchSysCache1(CLAOID, ObjectIdGetDatum(opclasses[i]));
 		if (!HeapTupleIsValid(cla_ht))
-			elog(ERROR, "cache lookup failed for opclass %u", opclasses[i]);
+			elog(WARNING, "cache lookup failed for opclass %u", opclasses[i]);
 		cla_tup = (Form_pg_opclass) GETSTRUCT(cla_ht);
 		amid = cla_tup->opcmethod;
 		opfamily = cla_tup->opcfamily;
@@ -9751,7 +9751,7 @@ CloneFkReferenced(Relation parentRel, Relation partitionRel)
 
 		tuple = SearchSysCache1(CONSTROID, constrOid);
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for constraint %u", constrOid);
+			elog(WARNING, "cache lookup failed for constraint %u", constrOid);
 		constrForm = (Form_pg_constraint) GETSTRUCT(tuple);
 
 		/*
@@ -9906,7 +9906,7 @@ CloneFkReferencing(List **wqueue, Relation parentRel, Relation partRel)
 
 		tuple = SearchSysCache1(CONSTROID, parentConstrOid);
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for constraint %u",
+			elog(WARNING, "cache lookup failed for constraint %u",
 				 parentConstrOid);
 		constrForm = (Form_pg_constraint) GETSTRUCT(tuple);
 
@@ -10085,7 +10085,7 @@ tryAttachPartitionForeignKey(ForeignKeyCacheInfo *fk,
 	parentConstrTup = SearchSysCache1(CONSTROID,
 									  ObjectIdGetDatum(parentConstrOid));
 	if (!HeapTupleIsValid(parentConstrTup))
-		elog(ERROR, "cache lookup failed for constraint %u", parentConstrOid);
+		elog(WARNING, "cache lookup failed for constraint %u", parentConstrOid);
 	parentConstr = (Form_pg_constraint) GETSTRUCT(parentConstrTup);
 
 	/*
@@ -10116,7 +10116,7 @@ tryAttachPartitionForeignKey(ForeignKeyCacheInfo *fk,
 	partcontup = SearchSysCache1(CONSTROID,
 								 ObjectIdGetDatum(fk->conoid));
 	if (!HeapTupleIsValid(partcontup))
-		elog(ERROR, "cache lookup failed for constraint %u", fk->conoid);
+		elog(WARNING, "cache lookup failed for constraint %u", fk->conoid);
 	partConstr = (Form_pg_constraint) GETSTRUCT(partcontup);
 	if (OidIsValid(partConstr->conparentid) ||
 		!partConstr->convalidated ||
@@ -10745,7 +10745,7 @@ transformFkeyGetPrimaryKey(Relation pkrel, Oid *indexOid,
 
 		indexTuple = SearchSysCache1(INDEXRELID, ObjectIdGetDatum(indexoid));
 		if (!HeapTupleIsValid(indexTuple))
-			elog(ERROR, "cache lookup failed for index %u", indexoid);
+			elog(WARNING, "cache lookup failed for index %u", indexoid);
 		indexStruct = (Form_pg_index) GETSTRUCT(indexTuple);
 		if (indexStruct->indisprimary && indexStruct->indisvalid)
 		{
@@ -10858,7 +10858,7 @@ transformFkeyCheckAttrs(Relation pkrel,
 		indexoid = lfirst_oid(indexoidscan);
 		indexTuple = SearchSysCache1(INDEXRELID, ObjectIdGetDatum(indexoid));
 		if (!HeapTupleIsValid(indexTuple))
-			elog(ERROR, "cache lookup failed for index %u", indexoid);
+			elog(WARNING, "cache lookup failed for index %u", indexoid);
 		indexStruct = (Form_pg_index) GETSTRUCT(indexTuple);
 
 		/*
@@ -12563,7 +12563,7 @@ ATPostAlterTypeCleanup(List **wqueue, AlteredTableInfo *tab, LOCKMODE lockmode)
 
 		tup = SearchSysCache1(CONSTROID, ObjectIdGetDatum(oldId));
 		if (!HeapTupleIsValid(tup)) /* should not happen */
-			elog(ERROR, "cache lookup failed for constraint %u", oldId);
+			elog(WARNING, "cache lookup failed for constraint %u", oldId);
 		con = (Form_pg_constraint) GETSTRUCT(tup);
 		if (OidIsValid(con->conrelid))
 			relid = con->conrelid;
@@ -12994,7 +12994,7 @@ TryReuseForeignKey(Oid oldId, Constraint *con)
 
 	tup = SearchSysCache1(CONSTROID, ObjectIdGetDatum(oldId));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for constraint %u", oldId);
+		elog(WARNING, "cache lookup failed for constraint %u", oldId);
 
 	adatum = SysCacheGetAttr(CONSTROID, tup,
 							 Anum_pg_constraint_conpfeqop, &isNull);
@@ -13157,7 +13157,7 @@ ATExecChangeOwner(Oid relationOid, Oid newOwnerId, bool recursing, LOCKMODE lock
 
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relationOid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relationOid);
+		elog(WARNING, "cache lookup failed for relation %u", relationOid);
 	tuple_class = (Form_pg_class) GETSTRUCT(tuple);
 
 	/* Can we change the ownership of this tuple? */
@@ -13606,7 +13606,7 @@ ATExecSetRelOptions(Relation rel, List *defList, AlterTableType operation,
 	relid = RelationGetRelid(rel);
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 
 	if (operation == AT_ReplaceRelOptions)
 	{
@@ -13725,7 +13725,7 @@ ATExecSetRelOptions(Relation rel, List *defList, AlterTableType operation,
 		/* Fetch heap tuple */
 		tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(toastid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for relation %u", toastid);
+			elog(WARNING, "cache lookup failed for relation %u", toastid);
 
 		if (operation == AT_ReplaceRelOptions)
 		{
@@ -15195,7 +15195,7 @@ ATExecAddOf(Relation rel, const TypeName *ofTypename, LOCKMODE lockmode)
 	relationRelation = table_open(RelationRelationId, RowExclusiveLock);
 	classtuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(classtuple))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 	((Form_pg_class) GETSTRUCT(classtuple))->reloftype = typeid;
 	CatalogTupleUpdate(relationRelation, &classtuple->t_self, classtuple);
 
@@ -15240,7 +15240,7 @@ ATExecDropOf(Relation rel, LOCKMODE lockmode)
 	relationRelation = table_open(RelationRelationId, RowExclusiveLock);
 	tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 	((Form_pg_class) GETSTRUCT(tuple))->reloftype = InvalidOid;
 	CatalogTupleUpdate(relationRelation, &tuple->t_self, tuple);
 
@@ -15276,7 +15276,7 @@ relation_mark_replica_identity(Relation rel, char ri_type, Oid indexOid,
 	pg_class_tuple = SearchSysCacheCopy1(RELOID,
 										 ObjectIdGetDatum(RelationGetRelid(rel)));
 	if (!HeapTupleIsValid(pg_class_tuple))
-		elog(ERROR, "cache lookup failed for relation \"%s\"",
+		elog(WARNING, "cache lookup failed for relation \"%s\"",
 			 RelationGetRelationName(rel));
 	pg_class_form = (Form_pg_class) GETSTRUCT(pg_class_tuple);
 	if (pg_class_form->relreplident != ri_type)
@@ -15297,7 +15297,7 @@ relation_mark_replica_identity(Relation rel, char ri_type, Oid indexOid,
 
 		pg_index_tuple = SearchSysCache1(INDEXRELID, ObjectIdGetDatum(indexOid));
 		if (!HeapTupleIsValid(pg_index_tuple))
-			elog(ERROR, "cache lookup failed for index %u", indexOid);
+			elog(WARNING, "cache lookup failed for index %u", indexOid);
 		pg_index_form = (Form_pg_index) GETSTRUCT(pg_index_tuple);
 
 		if (pg_index_form->indisreplident)
@@ -15321,7 +15321,7 @@ relation_mark_replica_identity(Relation rel, char ri_type, Oid indexOid,
 		pg_index_tuple = SearchSysCacheCopy1(INDEXRELID,
 											 ObjectIdGetDatum(thisIndexOid));
 		if (!HeapTupleIsValid(pg_index_tuple))
-			elog(ERROR, "cache lookup failed for index %u", thisIndexOid);
+			elog(WARNING, "cache lookup failed for index %u", thisIndexOid);
 		pg_index_form = (Form_pg_index) GETSTRUCT(pg_index_tuple);
 
 		/*
@@ -15484,7 +15484,7 @@ ATExecSetRowSecurity(Relation rel, bool rls)
 	tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
 
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 
 	((Form_pg_class) GETSTRUCT(tuple))->relrowsecurity = rls;
 	CatalogTupleUpdate(pg_class, &tuple->t_self, tuple);
@@ -15510,7 +15510,7 @@ ATExecForceNoForceRowSecurity(Relation rel, bool force_rls)
 	tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
 
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 
 	((Form_pg_class) GETSTRUCT(tuple))->relforcerowsecurity = force_rls;
 	CatalogTupleUpdate(pg_class, &tuple->t_self, tuple);
@@ -15926,7 +15926,7 @@ AlterRelationNamespaceInternal(Relation classRel, Oid relOid,
 
 	classTup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relOid));
 	if (!HeapTupleIsValid(classTup))
-		elog(ERROR, "cache lookup failed for relation %u", relOid);
+		elog(WARNING, "cache lookup failed for relation %u", relOid);
 	classForm = (Form_pg_class) GETSTRUCT(classTup);
 
 	Assert(classForm->relnamespace == oldNspOid);
@@ -16383,7 +16383,7 @@ RangeVarCallbackForTruncate(const RangeVar *relation,
 
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relId));
 	if (!HeapTupleIsValid(tuple))	/* should not happen */
-		elog(ERROR, "cache lookup failed for relation %u", relId);
+		elog(WARNING, "cache lookup failed for relation %u", relId);
 
 	truncate_check_rel(relId, (Form_pg_class) GETSTRUCT(tuple));
 	truncate_check_perms(relId, (Form_pg_class) GETSTRUCT(tuple));
@@ -16407,7 +16407,7 @@ RangeVarCallbackOwnsRelation(const RangeVar *relation,
 
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relId));
 	if (!HeapTupleIsValid(tuple))	/* should not happen */
-		elog(ERROR, "cache lookup failed for relation %u", relId);
+		elog(WARNING, "cache lookup failed for relation %u", relId);
 
 	if (!pg_class_ownercheck(relId, GetUserId()))
 		aclcheck_error(ACLCHECK_NOT_OWNER, get_relkind_objtype(get_rel_relkind(relId)),
@@ -17921,7 +17921,7 @@ DetachPartitionFinalize(Relation rel, Relation partRel, bool concurrent,
 
 		contup = SearchSysCache1(CONSTROID, ObjectIdGetDatum(fk->conoid));
 		if (!HeapTupleIsValid(contup))
-			elog(ERROR, "cache lookup failed for constraint %u", fk->conoid);
+			elog(WARNING, "cache lookup failed for constraint %u", fk->conoid);
 		conform = (Form_pg_constraint) GETSTRUCT(contup);
 
 		/* consider only the inherited foreign keys */
@@ -18007,7 +18007,7 @@ DetachPartitionFinalize(Relation rel, Relation partRel, bool concurrent,
 	tuple = SearchSysCacheCopy1(RELOID,
 								ObjectIdGetDatum(RelationGetRelid(partRel)));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u",
+		elog(WARNING, "cache lookup failed for relation %u",
 			 RelationGetRelid(partRel));
 	Assert(((Form_pg_class) GETSTRUCT(tuple))->relispartition);
 
@@ -18478,7 +18478,7 @@ validatePartitionedIndex(Relation partedIdx, Relation partedTbl)
 		indTup = SearchSysCache1(INDEXRELID,
 								 ObjectIdGetDatum(inhForm->inhrelid));
 		if (!HeapTupleIsValid(indTup))
-			elog(ERROR, "cache lookup failed for index %u", inhForm->inhrelid);
+			elog(WARNING, "cache lookup failed for index %u", inhForm->inhrelid);
 		indexForm = (Form_pg_index) GETSTRUCT(indTup);
 		if (indexForm->indisvalid)
 			tuples += 1;
@@ -18611,7 +18611,7 @@ ATDetachCheckNoForeignKeyRefs(Relation partition)
 
 		tuple = SearchSysCache1(CONSTROID, ObjectIdGetDatum(constrOid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for constraint %u", constrOid);
+			elog(WARNING, "cache lookup failed for constraint %u", constrOid);
 		constrForm = (Form_pg_constraint) GETSTRUCT(tuple);
 
 		Assert(OidIsValid(constrForm->conparentid));

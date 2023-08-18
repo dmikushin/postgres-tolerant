@@ -844,7 +844,7 @@ build_coercion_expression(Node *node,
 
 		tp = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcId));
 		if (!HeapTupleIsValid(tp))
-			elog(ERROR, "cache lookup failed for function %u", funcId);
+			elog(WARNING, "cache lookup failed for function %u", funcId);
 		procstruct = (Form_pg_proc) GETSTRUCT(tp);
 
 		/*
@@ -3261,7 +3261,7 @@ typeIsOfTypedTable(Oid reltypeId, Oid reloftypeId)
 
 		tp = SearchSysCache1(RELOID, ObjectIdGetDatum(relid));
 		if (!HeapTupleIsValid(tp))
-			elog(ERROR, "cache lookup failed for relation %u", relid);
+			elog(WARNING, "cache lookup failed for relation %u", relid);
 
 		reltup = (Form_pg_class) GETSTRUCT(tp);
 		if (reltup->reloftype == reloftypeId)

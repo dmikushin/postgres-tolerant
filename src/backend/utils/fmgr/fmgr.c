@@ -180,7 +180,7 @@ fmgr_info_cxt_security(Oid functionId, FmgrInfo *finfo, MemoryContext mcxt,
 	/* Otherwise we need the pg_proc entry */
 	procedureTuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(functionId));
 	if (!HeapTupleIsValid(procedureTuple))
-		elog(ERROR, "cache lookup failed for function %u", functionId);
+		elog(WARNING, "cache lookup failed for function %u", functionId);
 	procedureStruct = (Form_pg_proc) GETSTRUCT(procedureTuple);
 
 	finfo->fn_nargs = procedureStruct->pronargs;
@@ -290,7 +290,7 @@ fmgr_symbol(Oid functionId, char **mod, char **fn)
 
 	procedureTuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(functionId));
 	if (!HeapTupleIsValid(procedureTuple))
-		elog(ERROR, "cache lookup failed for function %u", functionId);
+		elog(WARNING, "cache lookup failed for function %u", functionId);
 	procedureStruct = (Form_pg_proc) GETSTRUCT(procedureTuple);
 
 	if (procedureStruct->prosecdef ||
@@ -439,7 +439,7 @@ fmgr_info_other_lang(Oid functionId, FmgrInfo *finfo, HeapTuple procedureTuple)
 
 	languageTuple = SearchSysCache1(LANGOID, ObjectIdGetDatum(language));
 	if (!HeapTupleIsValid(languageTuple))
-		elog(ERROR, "cache lookup failed for language %u", language);
+		elog(WARNING, "cache lookup failed for language %u", language);
 	languageStruct = (Form_pg_language) GETSTRUCT(languageTuple);
 
 	/*
@@ -683,7 +683,7 @@ fmgr_security_definer(PG_FUNCTION_ARGS)
 		tuple = SearchSysCache1(PROCOID,
 								ObjectIdGetDatum(fcinfo->flinfo->fn_oid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u",
+			elog(WARNING, "cache lookup failed for function %u",
 				 fcinfo->flinfo->fn_oid);
 		procedureStruct = (Form_pg_proc) GETSTRUCT(tuple);
 
@@ -2057,7 +2057,7 @@ CheckFunctionValidatorAccess(Oid validatorOid, Oid functionOid)
 	 */
 	langTup = SearchSysCache1(LANGOID, ObjectIdGetDatum(procStruct->prolang));
 	if (!HeapTupleIsValid(langTup))
-		elog(ERROR, "cache lookup failed for language %u", procStruct->prolang);
+		elog(WARNING, "cache lookup failed for language %u", procStruct->prolang);
 	langStruct = (Form_pg_language) GETSTRUCT(langTup);
 
 	if (langStruct->lanvalidator != validatorOid)

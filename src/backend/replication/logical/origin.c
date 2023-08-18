@@ -396,7 +396,7 @@ restart:
 	 */
 	tuple = SearchSysCache1(REPLORIGIDENT, ObjectIdGetDatum(roident));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for replication origin with oid %u",
+		elog(WARNING, "cache lookup failed for replication origin with oid %u",
 			 roident);
 
 	CatalogTupleDelete(rel, &tuple->t_self);

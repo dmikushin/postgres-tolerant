@@ -432,7 +432,7 @@ format_procedure_parts(Oid procedure_oid, List **objnames, List **objargs,
 	if (!HeapTupleIsValid(proctup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for procedure with OID %u", procedure_oid);
+			elog(WARNING, "cache lookup failed for procedure with OID %u", procedure_oid);
 		return;
 	}
 
@@ -872,7 +872,7 @@ format_operator_parts(Oid operator_oid, List **objnames, List **objargs,
 	if (!HeapTupleIsValid(opertup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for operator with OID %u",
+			elog(WARNING, "cache lookup failed for operator with OID %u",
 				 operator_oid);
 		return;
 	}

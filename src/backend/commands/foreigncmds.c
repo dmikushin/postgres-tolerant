@@ -1250,7 +1250,7 @@ AlterUserMapping(AlterUserMappingStmt *stmt)
 	tp = SearchSysCacheCopy1(USERMAPPINGOID, ObjectIdGetDatum(umId));
 
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for user mapping %u", umId);
+		elog(WARNING, "cache lookup failed for user mapping %u", umId);
 
 	memset(repl_val, 0, sizeof(repl_val));
 	memset(repl_null, false, sizeof(repl_null));

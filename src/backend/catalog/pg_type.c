@@ -750,7 +750,7 @@ RenameTypeInternal(Oid typeOid, const char *newTypeName, Oid typeNamespace)
 
 	tuple = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(typeOid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for type %u", typeOid);
+		elog(WARNING, "cache lookup failed for type %u", typeOid);
 	typ = (Form_pg_type) GETSTRUCT(tuple);
 
 	/* We are not supposed to be changing schemas here */

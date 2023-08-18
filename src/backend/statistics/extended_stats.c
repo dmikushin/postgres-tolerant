@@ -557,7 +557,7 @@ examine_attribute(Node *expr)
 	typtuple = SearchSysCacheCopy1(TYPEOID,
 								   ObjectIdGetDatum(stats->attrtypid));
 	if (!HeapTupleIsValid(typtuple))
-		elog(ERROR, "cache lookup failed for type %u", stats->attrtypid);
+		elog(WARNING, "cache lookup failed for type %u", stats->attrtypid);
 	stats->attrtype = (Form_pg_type) GETSTRUCT(typtuple);
 
 	/*
@@ -658,7 +658,7 @@ examine_expression(Node *expr, int stattarget)
 	typtuple = SearchSysCacheCopy1(TYPEOID,
 								   ObjectIdGetDatum(stats->attrtypid));
 	if (!HeapTupleIsValid(typtuple))
-		elog(ERROR, "cache lookup failed for type %u", stats->attrtypid);
+		elog(WARNING, "cache lookup failed for type %u", stats->attrtypid);
 
 	stats->attrtype = (Form_pg_type) GETSTRUCT(typtuple);
 	stats->anl_context = CurrentMemoryContext;	/* XXX should be using
@@ -839,7 +839,7 @@ statext_store(Oid statOid,
 	/* there should already be a pg_statistic_ext_data tuple */
 	oldtup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(statOid));
 	if (!HeapTupleIsValid(oldtup))
-		elog(ERROR, "cache lookup failed for statistics object %u", statOid);
+		elog(WARNING, "cache lookup failed for statistics object %u", statOid);
 
 	/* replace it */
 	stup = heap_modify_tuple(oldtup,
@@ -2408,7 +2408,7 @@ statext_expressions_load(Oid stxoid, int idx)
 
 	htup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(stxoid));
 	if (!HeapTupleIsValid(htup))
-		elog(ERROR, "cache lookup failed for statistics object %u", stxoid);
+		elog(WARNING, "cache lookup failed for statistics object %u", stxoid);
 
 	value = SysCacheGetAttr(STATEXTDATASTXOID, htup,
 							Anum_pg_statistic_ext_data_stxdexpr, &isnull);

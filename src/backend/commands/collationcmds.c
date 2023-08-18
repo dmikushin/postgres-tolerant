@@ -126,7 +126,7 @@ DefineCollation(ParseState *pstate, List *names, List *parameters, bool if_not_e
 		collid = get_collation_oid(defGetQualifiedName(fromEl), false);
 		tp = SearchSysCache1(COLLOID, ObjectIdGetDatum(collid));
 		if (!HeapTupleIsValid(tp))
-			elog(ERROR, "cache lookup failed for collation %u", collid);
+			elog(WARNING, "cache lookup failed for collation %u", collid);
 
 		collcollate = pstrdup(NameStr(((Form_pg_collation) GETSTRUCT(tp))->collcollate));
 		collctype = pstrdup(NameStr(((Form_pg_collation) GETSTRUCT(tp))->collctype));
@@ -322,7 +322,7 @@ AlterCollation(AlterCollationStmt *stmt)
 
 	tup = SearchSysCacheCopy1(COLLOID, ObjectIdGetDatum(collOid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for collation %u", collOid);
+		elog(WARNING, "cache lookup failed for collation %u", collOid);
 
 	collForm = (Form_pg_collation) GETSTRUCT(tup);
 	collversion = SysCacheGetAttr(COLLOID, tup, Anum_pg_collation_collversion,

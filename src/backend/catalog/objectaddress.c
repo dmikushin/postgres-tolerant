@@ -2607,7 +2607,7 @@ get_object_namespace(const ObjectAddress *address)
 	/* Fetch tuple from syscache and extract namespace attribute. */
 	tuple = SearchSysCache1(cache, ObjectIdGetDatum(address->objectId));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for cache %d oid %u",
+		elog(WARNING, "cache lookup failed for cache %d oid %u",
 			 cache, address->objectId);
 	oid = DatumGetObjectId(SysCacheGetAttr(cache,
 										   tuple,
@@ -2965,7 +2965,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(collTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for collation %u",
+						elog(WARNING, "cache lookup failed for collation %u",
 							 object->objectId);
 					break;
 				}
@@ -2995,7 +2995,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(conTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for constraint %u",
+						elog(WARNING, "cache lookup failed for constraint %u",
 							 object->objectId);
 					break;
 				}
@@ -3034,7 +3034,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(conTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for conversion %u",
+						elog(WARNING, "cache lookup failed for conversion %u",
 							 object->objectId);
 					break;
 				}
@@ -3145,7 +3145,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(opcTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for opclass %u",
+						elog(WARNING, "cache lookup failed for opclass %u",
 							 object->objectId);
 					break;
 				}
@@ -3155,7 +3155,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				amTup = SearchSysCache1(AMOID,
 										ObjectIdGetDatum(opcForm->opcmethod));
 				if (!HeapTupleIsValid(amTup))
-					elog(ERROR, "cache lookup failed for access method %u",
+					elog(WARNING, "cache lookup failed for access method %u",
 						 opcForm->opcmethod);
 				amForm = (Form_pg_am) GETSTRUCT(amTup);
 
@@ -3188,7 +3188,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for access method %u",
+						elog(WARNING, "cache lookup failed for access method %u",
 							 object->objectId);
 					break;
 				}
@@ -3413,7 +3413,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!nspname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for namespace %u",
+						elog(WARNING, "cache lookup failed for namespace %u",
 							 object->objectId);
 					break;
 				}
@@ -3464,7 +3464,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search parser %u",
+						elog(WARNING, "cache lookup failed for text search parser %u",
 							 object->objectId);
 					break;
 				}
@@ -3494,7 +3494,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search dictionary %u",
+						elog(WARNING, "cache lookup failed for text search dictionary %u",
 							 object->objectId);
 					break;
 				}
@@ -3525,7 +3525,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search template %u",
+						elog(WARNING, "cache lookup failed for text search template %u",
 							 object->objectId);
 					break;
 				}
@@ -3556,7 +3556,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search configuration %u",
+						elog(WARNING, "cache lookup failed for text search configuration %u",
 							 object->objectId);
 					break;
 				}
@@ -3594,7 +3594,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!datname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for database %u",
+						elog(WARNING, "cache lookup failed for database %u",
 							 object->objectId);
 					break;
 				}
@@ -3610,7 +3610,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!tblspace)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for tablespace %u",
+						elog(WARNING, "cache lookup failed for tablespace %u",
 							 object->objectId);
 					break;
 				}
@@ -3652,7 +3652,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for user mapping %u",
+						elog(WARNING, "cache lookup failed for user mapping %u",
 							 object->objectId);
 					break;
 				}
@@ -3789,7 +3789,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!extname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for extension %u",
+						elog(WARNING, "cache lookup failed for extension %u",
 							 object->objectId);
 					break;
 				}
@@ -3806,7 +3806,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for event trigger %u",
+						elog(WARNING, "cache lookup failed for event trigger %u",
 							 object->objectId);
 					break;
 				}
@@ -3884,7 +3884,7 @@ getObjectDescription(const ObjectAddress *object, bool missing_ok)
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for publication table %u",
+						elog(WARNING, "cache lookup failed for publication table %u",
 							 object->objectId);
 					break;
 				}
@@ -3984,7 +3984,7 @@ getRelationDescription(StringInfo buffer, Oid relid, bool missing_ok)
 	if (!HeapTupleIsValid(relTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for relation %u", relid);
+			elog(WARNING, "cache lookup failed for relation %u", relid);
 		return;
 	}
 	relForm = (Form_pg_class) GETSTRUCT(relTup);
@@ -4059,14 +4059,14 @@ getOpFamilyDescription(StringInfo buffer, Oid opfid, bool missing_ok)
 	if (!HeapTupleIsValid(opfTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for opfamily %u", opfid);
+			elog(WARNING, "cache lookup failed for opfamily %u", opfid);
 		return;
 	}
 	opfForm = (Form_pg_opfamily) GETSTRUCT(opfTup);
 
 	amTup = SearchSysCache1(AMOID, ObjectIdGetDatum(opfForm->opfmethod));
 	if (!HeapTupleIsValid(amTup))
-		elog(ERROR, "cache lookup failed for access method %u",
+		elog(WARNING, "cache lookup failed for access method %u",
 			 opfForm->opfmethod);
 	amForm = (Form_pg_am) GETSTRUCT(amTup);
 
@@ -4512,7 +4512,7 @@ getRelationTypeDescription(StringInfo buffer, Oid relid, int32 objectSubId,
 	if (!HeapTupleIsValid(relTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for relation %u", relid);
+			elog(WARNING, "cache lookup failed for relation %u", relid);
 
 		/* fallback to "relation" for an undefined object */
 		appendStringInfoString(buffer, "relation");
@@ -4576,7 +4576,7 @@ getConstraintTypeDescription(StringInfo buffer, Oid constroid, bool missing_ok)
 	if (!HeapTupleIsValid(constrTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for constraint %u", constroid);
+			elog(WARNING, "cache lookup failed for constraint %u", constroid);
 
 		table_close(constrRel, AccessShareLock);
 
@@ -4612,7 +4612,7 @@ getProcedureTypeDescription(StringInfo buffer, Oid procid,
 	if (!HeapTupleIsValid(procTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for procedure %u", procid);
+			elog(WARNING, "cache lookup failed for procedure %u", procid);
 
 		/* fallback to "procedure" for an undefined object */
 		appendStringInfoString(buffer, "routine");
@@ -4789,7 +4789,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(collTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for collation %u",
+						elog(WARNING, "cache lookup failed for collation %u",
 							 object->objectId);
 					break;
 				}
@@ -4815,7 +4815,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(conTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for constraint %u",
+						elog(WARNING, "cache lookup failed for constraint %u",
 							 object->objectId);
 					break;
 				}
@@ -4863,7 +4863,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(conTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for conversion %u",
+						elog(WARNING, "cache lookup failed for conversion %u",
 							 object->objectId);
 					break;
 				}
@@ -4938,7 +4938,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(langTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for language %u",
+						elog(WARNING, "cache lookup failed for language %u",
 							 object->objectId);
 					break;
 				}
@@ -4987,7 +4987,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(opcTup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for opclass %u",
+						elog(WARNING, "cache lookup failed for opclass %u",
 							 object->objectId);
 					break;
 				}
@@ -4997,7 +4997,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				amTup = SearchSysCache1(AMOID,
 										ObjectIdGetDatum(opcForm->opcmethod));
 				if (!HeapTupleIsValid(amTup))
-					elog(ERROR, "cache lookup failed for access method %u",
+					elog(WARNING, "cache lookup failed for access method %u",
 						 opcForm->opcmethod);
 				amForm = (Form_pg_am) GETSTRUCT(amTup);
 
@@ -5028,7 +5028,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!amname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for access method %u",
+						elog(WARNING, "cache lookup failed for access method %u",
 							 object->objectId);
 					break;
 				}
@@ -5236,7 +5236,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!nspname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for namespace %u",
+						elog(WARNING, "cache lookup failed for namespace %u",
 							 object->objectId);
 					break;
 				}
@@ -5258,7 +5258,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for statistics object %u",
+						elog(WARNING, "cache lookup failed for statistics object %u",
 							 object->objectId);
 					break;
 				}
@@ -5285,7 +5285,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search parser %u",
+						elog(WARNING, "cache lookup failed for text search parser %u",
 							 object->objectId);
 					break;
 				}
@@ -5312,7 +5312,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search dictionary %u",
+						elog(WARNING, "cache lookup failed for text search dictionary %u",
 							 object->objectId);
 					break;
 				}
@@ -5339,7 +5339,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search template %u",
+						elog(WARNING, "cache lookup failed for text search template %u",
 							 object->objectId);
 					break;
 				}
@@ -5366,7 +5366,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for text search configuration %u",
+						elog(WARNING, "cache lookup failed for text search configuration %u",
 							 object->objectId);
 					break;
 				}
@@ -5404,7 +5404,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!datname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for database %u",
+						elog(WARNING, "cache lookup failed for database %u",
 							 object->objectId);
 					break;
 				}
@@ -5423,7 +5423,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!tblspace)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for tablespace %u",
+						elog(WARNING, "cache lookup failed for tablespace %u",
 							 object->objectId);
 					break;
 				}
@@ -5478,7 +5478,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for user mapping %u",
+						elog(WARNING, "cache lookup failed for user mapping %u",
 							 object->objectId);
 					break;
 				}
@@ -5601,7 +5601,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!extname)
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for extension %u",
+						elog(WARNING, "cache lookup failed for extension %u",
 							 object->objectId);
 					break;
 				}
@@ -5622,7 +5622,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for event trigger %u",
+						elog(WARNING, "cache lookup failed for event trigger %u",
 							 object->objectId);
 					break;
 				}
@@ -5694,7 +5694,7 @@ getObjectIdentityParts(const ObjectAddress *object,
 				if (!HeapTupleIsValid(tup))
 				{
 					if (!missing_ok)
-						elog(ERROR, "cache lookup failed for publication table %u",
+						elog(WARNING, "cache lookup failed for publication table %u",
 							 object->objectId);
 					break;
 				}
@@ -5814,14 +5814,14 @@ getOpFamilyIdentity(StringInfo buffer, Oid opfid, List **object,
 	if (!HeapTupleIsValid(opfTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for opfamily %u", opfid);
+			elog(WARNING, "cache lookup failed for opfamily %u", opfid);
 		return;
 	}
 	opfForm = (Form_pg_opfamily) GETSTRUCT(opfTup);
 
 	amTup = SearchSysCache1(AMOID, ObjectIdGetDatum(opfForm->opfmethod));
 	if (!HeapTupleIsValid(amTup))
-		elog(ERROR, "cache lookup failed for access method %u",
+		elog(WARNING, "cache lookup failed for access method %u",
 			 opfForm->opfmethod);
 	amForm = (Form_pg_am) GETSTRUCT(amTup);
 
@@ -5857,7 +5857,7 @@ getRelationIdentity(StringInfo buffer, Oid relid, List **object,
 	if (!HeapTupleIsValid(relTup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for relation %u", relid);
+			elog(WARNING, "cache lookup failed for relation %u", relid);
 
 		if (object)
 			*object = NIL;

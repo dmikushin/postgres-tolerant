@@ -155,7 +155,7 @@ statext_ndistinct_load(Oid mvoid)
 
 	htup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(mvoid));
 	if (!HeapTupleIsValid(htup))
-		elog(ERROR, "cache lookup failed for statistics object %u", mvoid);
+		elog(WARNING, "cache lookup failed for statistics object %u", mvoid);
 
 	ndist = SysCacheGetAttr(STATEXTDATASTXOID, htup,
 							Anum_pg_statistic_ext_data_stxdndistinct, &isnull);
@@ -473,7 +473,7 @@ ndistinct_for_combination(double totalrows, StatsBuildData *data,
 
 		type = lookup_type_cache(typid, TYPECACHE_LT_OPR);
 		if (type->lt_opr == InvalidOid) /* shouldn't happen */
-			elog(ERROR, "cache lookup failed for ordering operator for type %u",
+			elog(WARNING, "cache lookup failed for ordering operator for type %u",
 				 typid);
 
 		/* prepare the sort function for this dimension */

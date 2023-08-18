@@ -190,7 +190,7 @@ plpython_validator(PG_FUNCTION_ARGS)
 	/* Get the new function's pg_proc entry */
 	tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcoid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for function %u", funcoid);
+		elog(WARNING, "cache lookup failed for function %u", funcoid);
 	procStruct = (Form_pg_proc) GETSTRUCT(tuple);
 
 	is_trigger = PLy_procedure_is_trigger(procStruct);

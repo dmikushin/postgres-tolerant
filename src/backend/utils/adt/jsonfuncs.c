@@ -3110,7 +3110,7 @@ prepare_column_cache(ColumnIOData *column,
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", typid);
+		elog(WARNING, "cache lookup failed for type %u", typid);
 
 	type = (Form_pg_type) GETSTRUCT(tup);
 

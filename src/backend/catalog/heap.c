@@ -1566,7 +1566,7 @@ DeleteRelationTuple(Oid relid)
 
 	tup = SearchSysCache1(RELOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 
 	/* delete the relation tuple from pg_class, and finish up */
 	CatalogTupleDelete(pg_class_desc, &tup->t_self);
@@ -1685,7 +1685,7 @@ RemoveAttributeById(Oid relid, AttrNumber attnum)
 								ObjectIdGetDatum(relid),
 								Int16GetDatum(attnum));
 	if (!HeapTupleIsValid(tuple))	/* shouldn't happen */
-		elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+		elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 			 attnum, relid);
 	attStruct = (Form_pg_attribute) GETSTRUCT(tuple);
 
@@ -1877,7 +1877,7 @@ RemoveAttrDefaultById(Oid attrdefId)
 								ObjectIdGetDatum(myrelid),
 								Int16GetDatum(myattnum));
 	if (!HeapTupleIsValid(tuple))	/* shouldn't happen */
-		elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+		elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 			 myattnum, myrelid);
 
 	((Form_pg_attribute) GETSTRUCT(tuple))->atthasdef = false;
@@ -1923,7 +1923,7 @@ heap_drop_with_catalog(Oid relid)
 	 */
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 	if (((Form_pg_class) GETSTRUCT(tuple))->relispartition)
 	{
 		/*
@@ -1977,7 +1977,7 @@ heap_drop_with_catalog(Oid relid)
 
 		tuple = SearchSysCache1(FOREIGNTABLEREL, ObjectIdGetDatum(relid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for foreign table %u", relid);
+			elog(WARNING, "cache lookup failed for foreign table %u", relid);
 
 		CatalogTupleDelete(rel, &tuple->t_self);
 
@@ -2115,7 +2115,7 @@ RelationClearMissing(Relation rel)
 								ObjectIdGetDatum(relid),
 								Int16GetDatum(attnum));
 		if (!HeapTupleIsValid(tuple))	/* shouldn't happen */
-			elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+			elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 				 attnum, relid);
 
 		attrtuple = (Form_pg_attribute) GETSTRUCT(tuple);
@@ -2175,7 +2175,7 @@ SetAttrMissing(Oid relid, char *attname, char *value)
 	attrrel = table_open(AttributeRelationId, RowExclusiveLock);
 	atttup = SearchSysCacheAttName(relid, attname);
 	if (!HeapTupleIsValid(atttup))
-		elog(ERROR, "cache lookup failed for attribute %s of relation %u",
+		elog(WARNING, "cache lookup failed for attribute %s of relation %u",
 			 attname, relid);
 	attStruct = (Form_pg_attribute) GETSTRUCT(atttup);
 
@@ -2273,7 +2273,7 @@ StoreAttrDefault(Relation rel, AttrNumber attnum,
 								 ObjectIdGetDatum(RelationGetRelid(rel)),
 								 Int16GetDatum(attnum));
 	if (!HeapTupleIsValid(atttup))
-		elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+		elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 			 attnum, RelationGetRelid(rel));
 	attStruct = (Form_pg_attribute) GETSTRUCT(atttup);
 	attgenerated = attStruct->attgenerated;
@@ -2993,7 +2993,7 @@ SetRelationNumChecks(Relation rel, int numchecks)
 	reltup = SearchSysCacheCopy1(RELOID,
 								 ObjectIdGetDatum(RelationGetRelid(rel)));
 	if (!HeapTupleIsValid(reltup))
-		elog(ERROR, "cache lookup failed for relation %u",
+		elog(WARNING, "cache lookup failed for relation %u",
 			 RelationGetRelid(rel));
 	relStruct = (Form_pg_class) GETSTRUCT(reltup);
 
@@ -3774,7 +3774,7 @@ RemovePartitionKeyByRelId(Oid relid)
 
 	tuple = SearchSysCache1(PARTRELID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for partition key of relation %u",
+		elog(WARNING, "cache lookup failed for partition key of relation %u",
 			 relid);
 
 	CatalogTupleDelete(rel, &tuple->t_self);
@@ -3811,7 +3811,7 @@ StorePartitionBound(Relation rel, Relation parent, PartitionBoundSpec *bound)
 	tuple = SearchSysCacheCopy1(RELOID,
 								ObjectIdGetDatum(RelationGetRelid(rel)));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u",
+		elog(WARNING, "cache lookup failed for relation %u",
 			 RelationGetRelid(rel));
 
 #ifdef USE_ASSERT_CHECKING

@@ -739,7 +739,7 @@ fmgr_internal_validator(PG_FUNCTION_ARGS)
 
 	tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcoid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for function %u", funcoid);
+		elog(WARNING, "cache lookup failed for function %u", funcoid);
 
 	tmp = SysCacheGetAttr(PROCOID, tuple, Anum_pg_proc_prosrc, &isnull);
 	if (isnull)
@@ -788,7 +788,7 @@ fmgr_c_validator(PG_FUNCTION_ARGS)
 
 	tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcoid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for function %u", funcoid);
+		elog(WARNING, "cache lookup failed for function %u", funcoid);
 
 	tmp = SysCacheGetAttr(PROCOID, tuple, Anum_pg_proc_prosrc, &isnull);
 	if (isnull)
@@ -836,7 +836,7 @@ fmgr_sql_validator(PG_FUNCTION_ARGS)
 
 	tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcoid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for function %u", funcoid);
+		elog(WARNING, "cache lookup failed for function %u", funcoid);
 	proc = (Form_pg_proc) GETSTRUCT(tuple);
 
 	/* Disallow pseudotype result */

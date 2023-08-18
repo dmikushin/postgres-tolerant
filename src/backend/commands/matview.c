@@ -97,7 +97,7 @@ SetMatViewPopulatedState(Relation relation, bool newstate)
 	tuple = SearchSysCacheCopy1(RELOID,
 								ObjectIdGetDatum(RelationGetRelid(relation)));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u",
+		elog(WARNING, "cache lookup failed for relation %u",
 			 RelationGetRelid(relation));
 
 	((Form_pg_class) GETSTRUCT(tuple))->relispopulated = newstate;
@@ -730,7 +730,7 @@ refresh_by_match_merge(Oid matviewOid, Oid tempOid, Oid relowner,
 				 */
 				cla_ht = SearchSysCache1(CLAOID, ObjectIdGetDatum(opclass));
 				if (!HeapTupleIsValid(cla_ht))
-					elog(ERROR, "cache lookup failed for opclass %u", opclass);
+					elog(WARNING, "cache lookup failed for opclass %u", opclass);
 				cla_tup = (Form_pg_opclass) GETSTRUCT(cla_ht);
 				Assert(cla_tup->opcmethod == BTREE_AM_OID);
 				opfamily = cla_tup->opcfamily;

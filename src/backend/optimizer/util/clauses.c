@@ -2328,7 +2328,7 @@ eval_const_expressions_mutator(Node *node,
 				 */
 				func_tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 				if (!HeapTupleIsValid(func_tuple))
-					elog(ERROR, "cache lookup failed for function %u", funcid);
+					elog(WARNING, "cache lookup failed for function %u", funcid);
 
 				args = expand_function_arguments(expr->args,
 												 false, expr->wintype,
@@ -3835,7 +3835,7 @@ simplify_function(Oid funcid, Oid result_type, int32 result_typmod,
 	 */
 	func_tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 	if (!HeapTupleIsValid(func_tuple))
-		elog(ERROR, "cache lookup failed for function %u", funcid);
+		elog(WARNING, "cache lookup failed for function %u", funcid);
 	func_form = (Form_pg_proc) GETSTRUCT(func_tuple);
 
 	/*
@@ -4907,7 +4907,7 @@ inline_set_returning_function(PlannerInfo *root, RangeTblEntry *rte)
 	 */
 	func_tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(func_oid));
 	if (!HeapTupleIsValid(func_tuple))
-		elog(ERROR, "cache lookup failed for function %u", func_oid);
+		elog(WARNING, "cache lookup failed for function %u", func_oid);
 	funcform = (Form_pg_proc) GETSTRUCT(func_tuple);
 
 	/*

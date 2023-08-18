@@ -2279,7 +2279,7 @@ make_callstmt_target(PLpgSQL_execstate *estate, PLpgSQL_expr *expr)
 	func_tuple = SearchSysCache1(PROCOID,
 								 ObjectIdGetDatum(funcexpr->funcid));
 	if (!HeapTupleIsValid(func_tuple))
-		elog(ERROR, "cache lookup failed for function %u",
+		elog(WARNING, "cache lookup failed for function %u",
 			 funcexpr->funcid);
 
 	/*

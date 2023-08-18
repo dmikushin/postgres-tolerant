@@ -4752,7 +4752,7 @@ roles_is_member_of(Oid roleid, enum RoleRecurseType type,
 
 		dbtup = SearchSysCache1(DATABASEOID, ObjectIdGetDatum(MyDatabaseId));
 		if (!HeapTupleIsValid(dbtup))
-			elog(ERROR, "cache lookup failed for database %u", MyDatabaseId);
+			elog(WARNING, "cache lookup failed for database %u", MyDatabaseId);
 		dba = ((Form_pg_database) GETSTRUCT(dbtup))->datdba;
 		ReleaseSysCache(dbtup);
 	}
@@ -5183,13 +5183,13 @@ get_rolespec_tuple(const RoleSpec *role)
 		case ROLESPEC_CURRENT_USER:
 			tuple = SearchSysCache1(AUTHOID, GetUserId());
 			if (!HeapTupleIsValid(tuple))
-				elog(ERROR, "cache lookup failed for role %u", GetUserId());
+				elog(WARNING, "cache lookup failed for role %u", GetUserId());
 			break;
 
 		case ROLESPEC_SESSION_USER:
 			tuple = SearchSysCache1(AUTHOID, GetSessionUserId());
 			if (!HeapTupleIsValid(tuple))
-				elog(ERROR, "cache lookup failed for role %u", GetSessionUserId());
+				elog(WARNING, "cache lookup failed for role %u", GetSessionUserId());
 			break;
 
 		case ROLESPEC_PUBLIC:

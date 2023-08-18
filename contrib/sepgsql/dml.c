@@ -119,7 +119,7 @@ fixup_inherited_columns(Oid parentId, Oid childId, Bitmapset *columns)
 		attname = get_attname(parentId, attno, false);
 		attno = get_attnum(childId, attname);
 		if (attno == InvalidAttrNumber)
-			elog(ERROR, "cache lookup failed for attribute %s of relation %u",
+			elog(WARNING, "cache lookup failed for attribute %s of relation %u",
 				 attname, childId);
 
 		result = bms_add_member(result,

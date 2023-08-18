@@ -52,7 +52,7 @@ ginvalidate(Oid opclassoid)
 	/* Fetch opclass information */
 	classtup = SearchSysCache1(CLAOID, ObjectIdGetDatum(opclassoid));
 	if (!HeapTupleIsValid(classtup))
-		elog(ERROR, "cache lookup failed for operator class %u", opclassoid);
+		elog(WARNING, "cache lookup failed for operator class %u", opclassoid);
 	classform = (Form_pg_opclass) GETSTRUCT(classtup);
 
 	opfamilyoid = classform->opcfamily;
@@ -65,7 +65,7 @@ ginvalidate(Oid opclassoid)
 	/* Fetch opfamily information */
 	familytup = SearchSysCache1(OPFAMILYOID, ObjectIdGetDatum(opfamilyoid));
 	if (!HeapTupleIsValid(familytup))
-		elog(ERROR, "cache lookup failed for operator family %u", opfamilyoid);
+		elog(WARNING, "cache lookup failed for operator family %u", opfamilyoid);
 	familyform = (Form_pg_opfamily) GETSTRUCT(familytup);
 
 	opfamilyname = NameStr(familyform->opfname);

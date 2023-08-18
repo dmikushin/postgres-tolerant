@@ -1058,7 +1058,7 @@ examine_attribute(Relation onerel, int attnum, Node *index_expr)
 	typtuple = SearchSysCacheCopy1(TYPEOID,
 								   ObjectIdGetDatum(stats->attrtypid));
 	if (!HeapTupleIsValid(typtuple))
-		elog(ERROR, "cache lookup failed for type %u", stats->attrtypid);
+		elog(WARNING, "cache lookup failed for type %u", stats->attrtypid);
 	stats->attrtype = (Form_pg_type) GETSTRUCT(typtuple);
 	stats->anl_context = anl_context;
 	stats->tupattnum = attnum;

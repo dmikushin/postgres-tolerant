@@ -442,7 +442,7 @@ GetPublication(Oid pubid)
 
 	tup = SearchSysCache1(PUBLICATIONOID, ObjectIdGetDatum(pubid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for publication %u", pubid);
+		elog(WARNING, "cache lookup failed for publication %u", pubid);
 
 	pubform = (Form_pg_publication) GETSTRUCT(tup);
 
@@ -513,7 +513,7 @@ get_publication_name(Oid pubid, bool missing_ok)
 	if (!HeapTupleIsValid(tup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for publication %u", pubid);
+			elog(WARNING, "cache lookup failed for publication %u", pubid);
 		return NULL;
 	}
 

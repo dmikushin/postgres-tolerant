@@ -333,7 +333,7 @@ internal_get_result_type(Oid funcid,
 	/* First fetch the function's pg_proc row to inspect its rettype */
 	tp = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for function %u", funcid);
+		elog(WARNING, "cache lookup failed for function %u", funcid);
 	procform = (Form_pg_proc) GETSTRUCT(tp);
 
 	rettype = procform->prorettype;
@@ -1513,7 +1513,7 @@ get_func_result_name(Oid functionId)
 	/* First fetch the function's pg_proc row */
 	procTuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(functionId));
 	if (!HeapTupleIsValid(procTuple))
-		elog(ERROR, "cache lookup failed for function %u", functionId);
+		elog(WARNING, "cache lookup failed for function %u", functionId);
 
 	/* If there are no named OUT parameters, return NULL */
 	if (heap_attisnull(procTuple, Anum_pg_proc_proargmodes, NULL) ||

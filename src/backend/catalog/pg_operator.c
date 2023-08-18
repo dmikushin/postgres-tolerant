@@ -518,7 +518,7 @@ OperatorCreate(const char *operatorName,
 		tup = SearchSysCacheCopy1(OPEROID,
 								  ObjectIdGetDatum(operatorObjectId));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for operator %u",
+			elog(WARNING, "cache lookup failed for operator %u",
 				 operatorObjectId);
 
 		replaces[Anum_pg_operator_oid - 1] = false;

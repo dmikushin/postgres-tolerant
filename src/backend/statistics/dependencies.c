@@ -270,7 +270,7 @@ dependency_degree(StatsBuildData *data, int k, AttrNumber *dependency)
 
 		type = lookup_type_cache(colstat->attrtypid, TYPECACHE_LT_OPR);
 		if (type->lt_opr == InvalidOid) /* shouldn't happen */
-			elog(ERROR, "cache lookup failed for ordering operator for type %u",
+			elog(WARNING, "cache lookup failed for ordering operator for type %u",
 				 colstat->attrtypid);
 
 		/* prepare the sort function for this dimension */
@@ -627,7 +627,7 @@ statext_dependencies_load(Oid mvoid)
 
 	htup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(mvoid));
 	if (!HeapTupleIsValid(htup))
-		elog(ERROR, "cache lookup failed for statistics object %u", mvoid);
+		elog(WARNING, "cache lookup failed for statistics object %u", mvoid);
 
 	deps = SysCacheGetAttr(STATEXTDATASTXOID, htup,
 						   Anum_pg_statistic_ext_data_stxddependencies, &isnull);

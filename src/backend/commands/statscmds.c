@@ -735,7 +735,7 @@ RemoveStatisticsById(Oid statsOid)
 	tup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(statsOid));
 
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for statistics data %u", statsOid);
+		elog(WARNING, "cache lookup failed for statistics data %u", statsOid);
 
 	CatalogTupleDelete(relation, &tup->t_self);
 
@@ -752,7 +752,7 @@ RemoveStatisticsById(Oid statsOid)
 	tup = SearchSysCache1(STATEXTOID, ObjectIdGetDatum(statsOid));
 
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for statistics object %u", statsOid);
+		elog(WARNING, "cache lookup failed for statistics object %u", statsOid);
 
 	statext = (Form_pg_statistic_ext) GETSTRUCT(tup);
 	relid = statext->stxrelid;
@@ -883,7 +883,7 @@ StatisticsGetRelation(Oid statId, bool missing_ok)
 	{
 		if (missing_ok)
 			return InvalidOid;
-		elog(ERROR, "cache lookup failed for statistics object %u", statId);
+		elog(WARNING, "cache lookup failed for statistics object %u", statId);
 	}
 	stx = (Form_pg_statistic_ext) GETSTRUCT(tuple);
 	Assert(stx->oid == statId);

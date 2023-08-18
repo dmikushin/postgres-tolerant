@@ -150,7 +150,7 @@ preprocess_aggref(Aggref *aggref, PlannerInfo *root)
 	aggTuple = SearchSysCache1(AGGFNOID,
 							   ObjectIdGetDatum(aggref->aggfnoid));
 	if (!HeapTupleIsValid(aggTuple))
-		elog(ERROR, "cache lookup failed for aggregate %u",
+		elog(WARNING, "cache lookup failed for aggregate %u",
 			 aggref->aggfnoid);
 	aggform = (Form_pg_aggregate) GETSTRUCT(aggTuple);
 	aggtransfn = aggform->aggtransfn;

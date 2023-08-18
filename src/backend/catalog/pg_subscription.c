@@ -55,7 +55,7 @@ GetSubscription(Oid subid, bool missing_ok)
 		if (missing_ok)
 			return NULL;
 
-		elog(ERROR, "cache lookup failed for subscription %u", subid);
+		elog(WARNING, "cache lookup failed for subscription %u", subid);
 	}
 
 	subform = (Form_pg_subscription) GETSTRUCT(tup);
@@ -193,7 +193,7 @@ get_subscription_name(Oid subid, bool missing_ok)
 	if (!HeapTupleIsValid(tup))
 	{
 		if (!missing_ok)
-			elog(ERROR, "cache lookup failed for subscription %u", subid);
+			elog(WARNING, "cache lookup failed for subscription %u", subid);
 		return NULL;
 	}
 

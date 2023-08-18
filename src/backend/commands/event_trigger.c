@@ -1973,7 +1973,7 @@ pg_event_trigger_ddl_commands(PG_FUNCTION_ARGS)
 															   get_object_attnum_oid(addr.classId),
 															   addr.objectId);
 							if (!HeapTupleIsValid(objtup))
-								elog(ERROR, "cache lookup failed for object %u/%u",
+								elog(WARNING, "cache lookup failed for object %u/%u",
 									 addr.classId, addr.objectId);
 							schema_oid =
 								heap_getattr(objtup, nspAttnum,

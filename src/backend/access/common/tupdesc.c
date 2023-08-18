@@ -634,18 +634,22 @@ TupleDescInitEntry(TupleDesc desc,
 
 	tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(oidtypeid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for type %u", oidtypeid);
-	typeForm = (Form_pg_type) GETSTRUCT(tuple);
+		elog(WARNING, "cache lookup failed for type %u", oidtypeid);
+	else
+	{
+		typeForm = (Form_pg_type) GETSTRUCT(tuple);
+
+		att->attlen = typeForm->typlen;
+		att->attbyval = typeForm->typbyval;
+		att->attalign = typeForm->typalign;
+		att->attstorage = typeForm->typstorage;
+		att->attcollation = typeForm->typcollation;
+
+		ReleaseSysCache(tuple);
+	}
 
 	att->atttypid = oidtypeid;
-	att->attlen = typeForm->typlen;
-	att->attbyval = typeForm->typbyval;
-	att->attalign = typeForm->typalign;
-	att->attstorage = typeForm->typstorage;
 	att->attcompression = InvalidCompressionMethod;
-	att->attcollation = typeForm->typcollation;
-
-	ReleaseSysCache(tuple);
 }
 
 /*

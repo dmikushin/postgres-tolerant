@@ -249,7 +249,7 @@ AggregateCreate(const char *aggName,
 
 	tup = SearchSysCache1(PROCOID, ObjectIdGetDatum(transfn));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for function %u", transfn);
+		elog(WARNING, "cache lookup failed for function %u", transfn);
 	proc = (Form_pg_proc) GETSTRUCT(tup);
 
 	/*
@@ -293,7 +293,7 @@ AggregateCreate(const char *aggName,
 
 		tup = SearchSysCache1(PROCOID, ObjectIdGetDatum(mtransfn));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for function %u", mtransfn);
+			elog(WARNING, "cache lookup failed for function %u", mtransfn);
 		proc = (Form_pg_proc) GETSTRUCT(tup);
 
 		/*
@@ -338,7 +338,7 @@ AggregateCreate(const char *aggName,
 
 		tup = SearchSysCache1(PROCOID, ObjectIdGetDatum(minvtransfn));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for function %u", minvtransfn);
+			elog(WARNING, "cache lookup failed for function %u", minvtransfn);
 		proc = (Form_pg_proc) GETSTRUCT(tup);
 
 		/*

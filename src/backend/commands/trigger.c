@@ -1011,7 +1011,7 @@ CreateTriggerFiringOn(CreateTrigStmt *stmt, const char *queryString,
 	tuple = SearchSysCacheCopy1(RELOID,
 								ObjectIdGetDatum(RelationGetRelid(rel)));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u",
+		elog(WARNING, "cache lookup failed for relation %u",
 			 RelationGetRelid(rel));
 	if (!((Form_pg_class) GETSTRUCT(tuple))->relhastriggers)
 	{

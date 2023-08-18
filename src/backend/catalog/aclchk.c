@@ -1584,7 +1584,7 @@ expand_all_col_privileges(Oid table_oid, Form_pg_class classForm,
 								   ObjectIdGetDatum(table_oid),
 								   Int16GetDatum(curr_att));
 		if (!HeapTupleIsValid(attTuple))
-			elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+			elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 				 curr_att, table_oid);
 
 		isdropped = ((Form_pg_attribute) GETSTRUCT(attTuple))->attisdropped;
@@ -1631,7 +1631,7 @@ ExecGrant_Attribute(InternalGrant *istmt, Oid relOid, const char *relname,
 								 ObjectIdGetDatum(relOid),
 								 Int16GetDatum(attnum));
 	if (!HeapTupleIsValid(attr_tuple))
-		elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+		elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 			 attnum, relOid);
 	pg_attribute_tuple = (Form_pg_attribute) GETSTRUCT(attr_tuple);
 
@@ -1781,7 +1781,7 @@ ExecGrant_Relation(InternalGrant *istmt)
 
 		tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relOid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for relation %u", relOid);
+			elog(WARNING, "cache lookup failed for relation %u", relOid);
 		pg_class_tuple = (Form_pg_class) GETSTRUCT(tuple);
 
 		/* Not sensible to grant on an index */
@@ -2118,7 +2118,7 @@ ExecGrant_Database(InternalGrant *istmt)
 
 		tuple = SearchSysCache1(DATABASEOID, ObjectIdGetDatum(datId));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for database %u", datId);
+			elog(WARNING, "cache lookup failed for database %u", datId);
 
 		pg_database_tuple = (Form_pg_database) GETSTRUCT(tuple);
 
@@ -2239,7 +2239,7 @@ ExecGrant_Fdw(InternalGrant *istmt)
 		tuple = SearchSysCache1(FOREIGNDATAWRAPPEROID,
 								ObjectIdGetDatum(fdwid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for foreign-data wrapper %u", fdwid);
+			elog(WARNING, "cache lookup failed for foreign-data wrapper %u", fdwid);
 
 		pg_fdw_tuple = (Form_pg_foreign_data_wrapper) GETSTRUCT(tuple);
 
@@ -2365,7 +2365,7 @@ ExecGrant_ForeignServer(InternalGrant *istmt)
 
 		tuple = SearchSysCache1(FOREIGNSERVEROID, ObjectIdGetDatum(srvid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for foreign server %u", srvid);
+			elog(WARNING, "cache lookup failed for foreign server %u", srvid);
 
 		pg_server_tuple = (Form_pg_foreign_server) GETSTRUCT(tuple);
 
@@ -2490,7 +2490,7 @@ ExecGrant_Function(InternalGrant *istmt)
 
 		tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcId));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", funcId);
+			elog(WARNING, "cache lookup failed for function %u", funcId);
 
 		pg_proc_tuple = (Form_pg_proc) GETSTRUCT(tuple);
 
@@ -2613,7 +2613,7 @@ ExecGrant_Language(InternalGrant *istmt)
 
 		tuple = SearchSysCache1(LANGOID, ObjectIdGetDatum(langId));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for language %u", langId);
+			elog(WARNING, "cache lookup failed for language %u", langId);
 
 		pg_language_tuple = (Form_pg_language) GETSTRUCT(tuple);
 
@@ -2884,7 +2884,7 @@ ExecGrant_Namespace(InternalGrant *istmt)
 
 		tuple = SearchSysCache1(NAMESPACEOID, ObjectIdGetDatum(nspid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for namespace %u", nspid);
+			elog(WARNING, "cache lookup failed for namespace %u", nspid);
 
 		pg_namespace_tuple = (Form_pg_namespace) GETSTRUCT(tuple);
 
@@ -3009,7 +3009,7 @@ ExecGrant_Tablespace(InternalGrant *istmt)
 		/* Search syscache for pg_tablespace */
 		tuple = SearchSysCache1(TABLESPACEOID, ObjectIdGetDatum(tblId));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for tablespace %u", tblId);
+			elog(WARNING, "cache lookup failed for tablespace %u", tblId);
 
 		pg_tablespace_tuple = (Form_pg_tablespace) GETSTRUCT(tuple);
 
@@ -3129,7 +3129,7 @@ ExecGrant_Type(InternalGrant *istmt)
 		/* Search syscache for pg_type */
 		tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typId));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for type %u", typId);
+			elog(WARNING, "cache lookup failed for type %u", typId);
 
 		pg_type_tuple = (Form_pg_type) GETSTRUCT(tuple);
 
@@ -4508,7 +4508,7 @@ pg_type_aclmask(Oid type_oid, Oid roleid, AclMode mask, AclMaskHow how)
 		tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(elttype_oid));
 		/* this case is not a user-facing error, so elog not ereport */
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for type %u", elttype_oid);
+			elog(WARNING, "cache lookup failed for type %u", elttype_oid);
 		typeForm = (Form_pg_type) GETSTRUCT(tuple);
 	}
 
@@ -5647,7 +5647,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for relation %u", objoid);
+			elog(WARNING, "cache lookup failed for relation %u", objoid);
 		pg_class_tuple = (Form_pg_class) GETSTRUCT(tuple);
 
 		/*
@@ -5729,7 +5729,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 		tuple = SearchSysCache1(FOREIGNDATAWRAPPEROID,
 								ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for foreign data wrapper %u",
+			elog(WARNING, "cache lookup failed for foreign data wrapper %u",
 				 objoid);
 
 		aclDatum = SysCacheGetAttr(FOREIGNDATAWRAPPEROID, tuple,
@@ -5752,7 +5752,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(FOREIGNSERVEROID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for foreign data wrapper %u",
+			elog(WARNING, "cache lookup failed for foreign data wrapper %u",
 				 objoid);
 
 		aclDatum = SysCacheGetAttr(FOREIGNSERVEROID, tuple,
@@ -5775,7 +5775,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(LANGOID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for language %u", objoid);
+			elog(WARNING, "cache lookup failed for language %u", objoid);
 
 		aclDatum = SysCacheGetAttr(LANGOID, tuple, Anum_pg_language_lanacl,
 								   &isNull);
@@ -5838,7 +5838,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(NAMESPACEOID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", objoid);
+			elog(WARNING, "cache lookup failed for function %u", objoid);
 
 		aclDatum = SysCacheGetAttr(NAMESPACEOID, tuple,
 								   Anum_pg_namespace_nspacl, &isNull);
@@ -5859,7 +5859,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", objoid);
+			elog(WARNING, "cache lookup failed for function %u", objoid);
 
 		aclDatum = SysCacheGetAttr(PROCOID, tuple, Anum_pg_proc_proacl,
 								   &isNull);
@@ -5880,7 +5880,7 @@ recordExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", objoid);
+			elog(WARNING, "cache lookup failed for function %u", objoid);
 
 		aclDatum = SysCacheGetAttr(TYPEOID, tuple, Anum_pg_type_typacl,
 								   &isNull);
@@ -5941,7 +5941,7 @@ removeExtObjInitPriv(Oid objoid, Oid classoid)
 
 		tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(objoid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for relation %u", objoid);
+			elog(WARNING, "cache lookup failed for relation %u", objoid);
 		pg_class_tuple = (Form_pg_class) GETSTRUCT(tuple);
 
 		/*

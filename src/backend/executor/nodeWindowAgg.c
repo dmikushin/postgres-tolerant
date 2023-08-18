@@ -2647,7 +2647,7 @@ initialize_peragg(WindowAggState *winstate, WindowFunc *wfunc,
 
 	aggTuple = SearchSysCache1(AGGFNOID, ObjectIdGetDatum(wfunc->winfnoid));
 	if (!HeapTupleIsValid(aggTuple))
-		elog(ERROR, "cache lookup failed for aggregate %u",
+		elog(WARNING, "cache lookup failed for aggregate %u",
 			 wfunc->winfnoid);
 	aggform = (Form_pg_aggregate) GETSTRUCT(aggTuple);
 
@@ -2708,7 +2708,7 @@ initialize_peragg(WindowAggState *winstate, WindowFunc *wfunc,
 		procTuple = SearchSysCache1(PROCOID,
 									ObjectIdGetDatum(wfunc->winfnoid));
 		if (!HeapTupleIsValid(procTuple))
-			elog(ERROR, "cache lookup failed for function %u",
+			elog(WARNING, "cache lookup failed for function %u",
 				 wfunc->winfnoid);
 		aggOwner = ((Form_pg_proc) GETSTRUCT(procTuple))->proowner;
 		ReleaseSysCache(procTuple);

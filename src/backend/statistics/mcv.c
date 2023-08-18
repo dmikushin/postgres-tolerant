@@ -364,7 +364,7 @@ build_mss(StatsBuildData *data)
 
 		type = lookup_type_cache(colstat->attrtypid, TYPECACHE_LT_OPR);
 		if (type->lt_opr == InvalidOid) /* shouldn't happen */
-			elog(ERROR, "cache lookup failed for ordering operator for type %u",
+			elog(WARNING, "cache lookup failed for ordering operator for type %u",
 				 colstat->attrtypid);
 
 		multi_sort_add_dimension(mss, i, type->lt_opr, colstat->attrcollid);
@@ -567,7 +567,7 @@ statext_mcv_load(Oid mvoid)
 	HeapTuple	htup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(mvoid));
 
 	if (!HeapTupleIsValid(htup))
-		elog(ERROR, "cache lookup failed for statistics object %u", mvoid);
+		elog(WARNING, "cache lookup failed for statistics object %u", mvoid);
 
 	mcvlist = SysCacheGetAttr(STATEXTDATASTXOID, htup,
 							  Anum_pg_statistic_ext_data_stxdmcv, &isnull);

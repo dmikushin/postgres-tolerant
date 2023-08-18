@@ -98,7 +98,7 @@ RelationBuildPartitionKey(Relation relation)
 							ObjectIdGetDatum(RelationGetRelid(relation)));
 
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for partition key of relation %u",
+		elog(WARNING, "cache lookup failed for partition key of relation %u",
 			 RelationGetRelid(relation));
 
 	partkeycxt = AllocSetContextCreate(CurTransactionContext,
@@ -198,7 +198,7 @@ RelationBuildPartitionKey(Relation relation)
 		opclasstup = SearchSysCache1(CLAOID,
 									 ObjectIdGetDatum(opclass->values[i]));
 		if (!HeapTupleIsValid(opclasstup))
-			elog(ERROR, "cache lookup failed for opclass %u", opclass->values[i]);
+			elog(WARNING, "cache lookup failed for opclass %u", opclass->values[i]);
 
 		opclassform = (Form_pg_opclass) GETSTRUCT(opclasstup);
 		key->partopfamily[i] = opclassform->opcfamily;
@@ -363,7 +363,7 @@ generate_partition_qual(Relation rel)
 	/* Get pg_class.relpartbound */
 	tuple = SearchSysCache1(RELOID, RelationGetRelid(rel));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u",
+		elog(WARNING, "cache lookup failed for relation %u",
 			 RelationGetRelid(rel));
 
 	boundDatum = SysCacheGetAttr(RELOID, tuple,

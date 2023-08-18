@@ -161,7 +161,7 @@ fillTypeDesc(SpGistTypeDesc *desc, Oid type)
 	desc->type = type;
 	tp = SearchSysCache1(TYPEOID, ObjectIdGetDatum(type));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for type %u", type);
+		elog(WARNING, "cache lookup failed for type %u", type);
 	typtup = (Form_pg_type) GETSTRUCT(tp);
 	desc->attlen = typtup->typlen;
 	desc->attbyval = typtup->typbyval;

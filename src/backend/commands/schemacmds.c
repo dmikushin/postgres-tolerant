@@ -78,7 +78,7 @@ CreateSchemaCommand(CreateSchemaStmt *stmt, const char *queryString,
 
 		tuple = SearchSysCache1(AUTHOID, ObjectIdGetDatum(owner_uid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for role %u", owner_uid);
+			elog(WARNING, "cache lookup failed for role %u", owner_uid);
 		schemaName =
 			pstrdup(NameStr(((Form_pg_authid) GETSTRUCT(tuple))->rolname));
 		ReleaseSysCache(tuple);
@@ -283,7 +283,7 @@ AlterSchemaOwner_oid(Oid oid, Oid newOwnerId)
 
 	tup = SearchSysCache1(NAMESPACEOID, ObjectIdGetDatum(oid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for schema %u", oid);
+		elog(WARNING, "cache lookup failed for schema %u", oid);
 
 	AlterSchemaOwner_internal(tup, rel, newOwnerId);
 

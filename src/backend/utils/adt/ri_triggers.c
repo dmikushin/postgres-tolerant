@@ -1878,7 +1878,7 @@ ri_GenerateQualCollation(StringInfo buf, Oid collation)
 
 	tp = SearchSysCache1(COLLOID, ObjectIdGetDatum(collation));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for collation %u", collation);
+		elog(WARNING, "cache lookup failed for collation %u", collation);
 	colltup = (Form_pg_collation) GETSTRUCT(tp);
 	collname = NameStr(colltup->collname);
 
@@ -2067,7 +2067,7 @@ ri_LoadConstraintInfo(Oid constraintOid)
 	 */
 	tup = SearchSysCache1(CONSTROID, ObjectIdGetDatum(constraintOid));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for constraint %u", constraintOid);
+		elog(WARNING, "cache lookup failed for constraint %u", constraintOid);
 	conForm = (Form_pg_constraint) GETSTRUCT(tup);
 
 	if (conForm->contype != CONSTRAINT_FOREIGN) /* should not happen */
@@ -2128,7 +2128,7 @@ get_ri_constraint_root(Oid constrOid)
 
 		tuple = SearchSysCache1(CONSTROID, ObjectIdGetDatum(constrOid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for constraint %u", constrOid);
+			elog(WARNING, "cache lookup failed for constraint %u", constrOid);
 		constrParentOid = ((Form_pg_constraint) GETSTRUCT(tuple))->conparentid;
 		ReleaseSysCache(tuple);
 		if (!OidIsValid(constrParentOid))

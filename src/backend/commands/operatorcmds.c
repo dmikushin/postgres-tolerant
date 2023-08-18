@@ -371,7 +371,7 @@ RemoveOperatorById(Oid operOid)
 
 	tup = SearchSysCache1(OPEROID, ObjectIdGetDatum(operOid));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for operator %u", operOid);
+		elog(WARNING, "cache lookup failed for operator %u", operOid);
 	op = (Form_pg_operator) GETSTRUCT(tup);
 
 	/*
@@ -388,7 +388,7 @@ RemoveOperatorById(Oid operOid)
 			ReleaseSysCache(tup);
 			tup = SearchSysCache1(OPEROID, ObjectIdGetDatum(operOid));
 			if (!HeapTupleIsValid(tup)) /* should not happen */
-				elog(ERROR, "cache lookup failed for operator %u", operOid);
+				elog(WARNING, "cache lookup failed for operator %u", operOid);
 		}
 	}
 
@@ -430,7 +430,7 @@ AlterOperator(AlterOperatorStmt *stmt)
 	catalog = table_open(OperatorRelationId, RowExclusiveLock);
 	tup = SearchSysCacheCopy1(OPEROID, ObjectIdGetDatum(oprId));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for operator %u", oprId);
+		elog(WARNING, "cache lookup failed for operator %u", oprId);
 	oprForm = (Form_pg_operator) GETSTRUCT(tup);
 
 	/* Process options */

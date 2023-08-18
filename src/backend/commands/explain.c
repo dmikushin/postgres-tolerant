@@ -2606,7 +2606,7 @@ show_sortorder_options(StringInfo buf, Node *sortexpr,
 		char	   *collname = get_collation_name(collation);
 
 		if (collname == NULL)
-			elog(ERROR, "cache lookup failed for collation %u", collation);
+			elog(WARNING, "cache lookup failed for collation %u", collation);
 		appendStringInfo(buf, " COLLATE %s", quote_identifier(collname));
 	}
 
@@ -2621,7 +2621,7 @@ show_sortorder_options(StringInfo buf, Node *sortexpr,
 		char	   *opname = get_opname(sortOperator);
 
 		if (opname == NULL)
-			elog(ERROR, "cache lookup failed for operator %u", sortOperator);
+			elog(WARNING, "cache lookup failed for operator %u", sortOperator);
 		appendStringInfo(buf, " USING %s", opname);
 		/* Determine whether operator would be considered ASC or DESC */
 		(void) get_equality_op_for_ordering_op(sortOperator, &reverse);
@@ -3476,7 +3476,7 @@ explain_get_index_name(Oid indexId)
 		/* default behavior: look it up in the catalogs */
 		result = get_rel_name(indexId);
 		if (result == NULL)
-			elog(ERROR, "cache lookup failed for index %u", indexId);
+			elog(WARNING, "cache lookup failed for index %u", indexId);
 	}
 	return result;
 }

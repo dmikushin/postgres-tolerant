@@ -2015,7 +2015,7 @@ do_autovacuum(void)
 	 */
 	tuple = SearchSysCache1(DATABASEOID, ObjectIdGetDatum(MyDatabaseId));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for database %u", MyDatabaseId);
+		elog(WARNING, "cache lookup failed for database %u", MyDatabaseId);
 	dbForm = (Form_pg_database) GETSTRUCT(tuple);
 
 	if (dbForm->datistemplate || !dbForm->datallowconn)

@@ -2988,7 +2988,7 @@ transformCallStmt(ParseState *pstate, CallStmt *stmt)
 
 	proctup = SearchSysCache1(PROCOID, ObjectIdGetDatum(fexpr->funcid));
 	if (!HeapTupleIsValid(proctup))
-		elog(ERROR, "cache lookup failed for function %u", fexpr->funcid);
+		elog(WARNING, "cache lookup failed for function %u", fexpr->funcid);
 
 	/*
 	 * Expand the argument list to deal with named-argument notation and

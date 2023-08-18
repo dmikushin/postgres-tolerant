@@ -118,7 +118,7 @@ OpFamilyCacheLookup(Oid amID, List *opfamilyname, bool missing_ok)
 
 		amtup = SearchSysCache1(AMOID, ObjectIdGetDatum(amID));
 		if (!HeapTupleIsValid(amtup))
-			elog(ERROR, "cache lookup failed for access method %u", amID);
+			elog(WARNING, "cache lookup failed for access method %u", amID);
 		ereport(ERROR,
 				(errcode(ERRCODE_UNDEFINED_OBJECT),
 				 errmsg("operator family \"%s\" does not exist for access method \"%s\"",
@@ -199,7 +199,7 @@ OpClassCacheLookup(Oid amID, List *opclassname, bool missing_ok)
 
 		amtup = SearchSysCache1(AMOID, ObjectIdGetDatum(amID));
 		if (!HeapTupleIsValid(amtup))
-			elog(ERROR, "cache lookup failed for access method %u", amID);
+			elog(WARNING, "cache lookup failed for access method %u", amID);
 		ereport(ERROR,
 				(errcode(ERRCODE_UNDEFINED_OBJECT),
 				 errmsg("operator class \"%s\" does not exist for access method \"%s\"",
@@ -1133,7 +1133,7 @@ assignOperTypes(OpFamilyMember *member, Oid amoid, Oid typeoid)
 	/* Fetch the operator definition */
 	optup = SearchSysCache1(OPEROID, ObjectIdGetDatum(member->object));
 	if (!HeapTupleIsValid(optup))
-		elog(ERROR, "cache lookup failed for operator %u", member->object);
+		elog(WARNING, "cache lookup failed for operator %u", member->object);
 	opform = (Form_pg_operator) GETSTRUCT(optup);
 
 	/*
@@ -1200,7 +1200,7 @@ assignProcTypes(OpFamilyMember *member, Oid amoid, Oid typeoid,
 	/* Fetch the procedure definition */
 	proctup = SearchSysCache1(PROCOID, ObjectIdGetDatum(member->object));
 	if (!HeapTupleIsValid(proctup))
-		elog(ERROR, "cache lookup failed for function %u", member->object);
+		elog(WARNING, "cache lookup failed for function %u", member->object);
 	procform = (Form_pg_proc) GETSTRUCT(proctup);
 
 	/* Check the signature of the opclass options parsing function */

@@ -206,7 +206,7 @@ LookupTypeNameExtended(ParseState *pstate,
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typoid));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for type %u", typoid);
+		elog(WARNING, "cache lookup failed for type %u", typoid);
 
 	typmod = typenameTypeMod(pstate, typeName, (Type) tup);
 
@@ -579,7 +579,7 @@ typeidType(Oid id)
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(id));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", id);
+		elog(WARNING, "cache lookup failed for type %u", id);
 	return (Type) tup;
 }
 
@@ -671,7 +671,7 @@ typeidTypeRelid(Oid type_id)
 
 	typeTuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(type_id));
 	if (!HeapTupleIsValid(typeTuple))
-		elog(ERROR, "cache lookup failed for type %u", type_id);
+		elog(WARNING, "cache lookup failed for type %u", type_id);
 	type = (Form_pg_type) GETSTRUCT(typeTuple);
 	result = type->typrelid;
 	ReleaseSysCache(typeTuple);
@@ -694,7 +694,7 @@ typeOrDomainTypeRelid(Oid type_id)
 	{
 		typeTuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(type_id));
 		if (!HeapTupleIsValid(typeTuple))
-			elog(ERROR, "cache lookup failed for type %u", type_id);
+			elog(WARNING, "cache lookup failed for type %u", type_id);
 		type = (Form_pg_type) GETSTRUCT(typeTuple);
 		if (type->typtype != TYPTYPE_DOMAIN)
 		{

@@ -625,7 +625,7 @@ DefineQueryRewrite(const char *rulename,
 		 */
 		classTup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(event_relid));
 		if (!HeapTupleIsValid(classTup))
-			elog(ERROR, "cache lookup failed for relation %u", event_relid);
+			elog(WARNING, "cache lookup failed for relation %u", event_relid);
 		classForm = (Form_pg_class) GETSTRUCT(classTup);
 
 		classForm->relam = InvalidOid;

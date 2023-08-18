@@ -186,7 +186,7 @@ AlterObjectRename_internal(Relation rel, Oid objectId, const char *new_name)
 
 	oldtup = SearchSysCache1(oidCacheId, ObjectIdGetDatum(objectId));
 	if (!HeapTupleIsValid(oldtup))
-		elog(ERROR, "cache lookup failed for object %u of catalog \"%s\"",
+		elog(WARNING, "cache lookup failed for object %u of catalog \"%s\"",
 			 objectId, RelationGetRelationName(rel));
 
 	datum = heap_getattr(oldtup, Anum_name,
@@ -707,7 +707,7 @@ AlterObjectNamespace_internal(Relation rel, Oid objid, Oid nspOid)
 
 	tup = SearchSysCacheCopy1(oidCacheId, ObjectIdGetDatum(objid));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for object %u of catalog \"%s\"",
+		elog(WARNING, "cache lookup failed for object %u of catalog \"%s\"",
 			 objid, RelationGetRelationName(rel));
 
 	name = heap_getattr(tup, Anum_name, RelationGetDescr(rel), &isnull);
@@ -947,7 +947,7 @@ AlterObjectOwner_internal(Relation rel, Oid objectId, Oid new_ownerId)
 
 	oldtup = get_catalog_object_by_oid(rel, Anum_oid, objectId);
 	if (oldtup == NULL)
-		elog(ERROR, "cache lookup failed for object %u of catalog \"%s\"",
+		elog(WARNING, "cache lookup failed for object %u of catalog \"%s\"",
 			 objectId, RelationGetRelationName(rel));
 
 	datum = heap_getattr(oldtup, Anum_owner,

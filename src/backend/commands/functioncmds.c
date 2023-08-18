@@ -1334,7 +1334,7 @@ RemoveFunctionById(Oid funcOid)
 
 	tup = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcOid));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for function %u", funcOid);
+		elog(WARNING, "cache lookup failed for function %u", funcOid);
 
 	prokind = ((Form_pg_proc) GETSTRUCT(tup))->prokind;
 
@@ -1353,7 +1353,7 @@ RemoveFunctionById(Oid funcOid)
 
 		tup = SearchSysCache1(AGGFNOID, ObjectIdGetDatum(funcOid));
 		if (!HeapTupleIsValid(tup)) /* should not happen */
-			elog(ERROR, "cache lookup failed for pg_aggregate tuple for function %u", funcOid);
+			elog(WARNING, "cache lookup failed for pg_aggregate tuple for function %u", funcOid);
 
 		CatalogTupleDelete(relation, &tup->t_self);
 
@@ -1396,7 +1396,7 @@ AlterFunction(ParseState *pstate, AlterFunctionStmt *stmt)
 
 	tup = SearchSysCacheCopy1(PROCOID, ObjectIdGetDatum(funcOid));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for function %u", funcOid);
+		elog(WARNING, "cache lookup failed for function %u", funcOid);
 
 	procForm = (Form_pg_proc) GETSTRUCT(tup);
 
@@ -1618,7 +1618,7 @@ CreateCast(CreateCastStmt *stmt)
 
 		tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", funcid);
+			elog(WARNING, "cache lookup failed for function %u", funcid);
 
 		procstruct = (Form_pg_proc) GETSTRUCT(tuple);
 		nargs = procstruct->pronargs;
@@ -1887,7 +1887,7 @@ CreateTransform(CreateTransformStmt *stmt)
 
 		tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(fromsqlfuncid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", fromsqlfuncid);
+			elog(WARNING, "cache lookup failed for function %u", fromsqlfuncid);
 		procstruct = (Form_pg_proc) GETSTRUCT(tuple);
 		if (procstruct->prorettype != INTERNALOID)
 			ereport(ERROR,
@@ -1913,7 +1913,7 @@ CreateTransform(CreateTransformStmt *stmt)
 
 		tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(tosqlfuncid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for function %u", tosqlfuncid);
+			elog(WARNING, "cache lookup failed for function %u", tosqlfuncid);
 		procstruct = (Form_pg_proc) GETSTRUCT(tuple);
 		if (procstruct->prorettype != typeid)
 			ereport(ERROR,
@@ -2227,7 +2227,7 @@ ExecuteCallStmt(CallStmt *stmt, ParamListInfo params, bool atomic, DestReceiver 
 
 	tp = SearchSysCache1(PROCOID, ObjectIdGetDatum(fexpr->funcid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for function %u", fexpr->funcid);
+		elog(WARNING, "cache lookup failed for function %u", fexpr->funcid);
 
 	/*
 	 * If proconfig is set we can't allow transaction commands because of the
@@ -2384,7 +2384,7 @@ CallStmtResultDesc(CallStmt *stmt)
 
 	tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(fexpr->funcid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for procedure %u", fexpr->funcid);
+		elog(WARNING, "cache lookup failed for procedure %u", fexpr->funcid);
 
 	tupdesc = build_function_result_tupdesc_t(tuple);
 

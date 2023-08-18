@@ -1319,12 +1319,12 @@ get_relation_statistics(RelOptInfo *rel, Relation relation)
 
 		htup = SearchSysCache1(STATEXTOID, ObjectIdGetDatum(statOid));
 		if (!HeapTupleIsValid(htup))
-			elog(ERROR, "cache lookup failed for statistics object %u", statOid);
+			elog(WARNING, "cache lookup failed for statistics object %u", statOid);
 		staForm = (Form_pg_statistic_ext) GETSTRUCT(htup);
 
 		dtup = SearchSysCache1(STATEXTDATASTXOID, ObjectIdGetDatum(statOid));
 		if (!HeapTupleIsValid(dtup))
-			elog(ERROR, "cache lookup failed for statistics object %u", statOid);
+			elog(WARNING, "cache lookup failed for statistics object %u", statOid);
 
 		/*
 		 * First, build the array of columns covered.  This is ultimately
@@ -1972,7 +1972,7 @@ add_function_cost(PlannerInfo *root, Oid funcid, Node *node,
 
 	proctup = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 	if (!HeapTupleIsValid(proctup))
-		elog(ERROR, "cache lookup failed for function %u", funcid);
+		elog(WARNING, "cache lookup failed for function %u", funcid);
 	procform = (Form_pg_proc) GETSTRUCT(proctup);
 
 	if (OidIsValid(procform->prosupport))
@@ -2033,7 +2033,7 @@ get_function_rows(PlannerInfo *root, Oid funcid, Node *node)
 
 	proctup = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 	if (!HeapTupleIsValid(proctup))
-		elog(ERROR, "cache lookup failed for function %u", funcid);
+		elog(WARNING, "cache lookup failed for function %u", funcid);
 	procform = (Form_pg_proc) GETSTRUCT(proctup);
 
 	Assert(procform->proretset);	/* else caller error */

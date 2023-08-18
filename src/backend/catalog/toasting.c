@@ -338,7 +338,7 @@ create_toast_table(Relation rel, Oid toastOid, Oid toastIndexOid,
 
 	reltup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relOid));
 	if (!HeapTupleIsValid(reltup))
-		elog(ERROR, "cache lookup failed for relation %u", relOid);
+		elog(WARNING, "cache lookup failed for relation %u", relOid);
 
 	((Form_pg_class) GETSTRUCT(reltup))->reltoastrelid = toast_relid;
 

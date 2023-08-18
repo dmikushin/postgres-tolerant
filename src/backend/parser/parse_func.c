@@ -366,7 +366,7 @@ ParseFuncOrColumn(ParseState *pstate, List *funcname, List *fargs,
 
 		tup = SearchSysCache1(AGGFNOID, ObjectIdGetDatum(funcid));
 		if (!HeapTupleIsValid(tup)) /* should not happen */
-			elog(ERROR, "cache lookup failed for aggregate %u", funcid);
+			elog(WARNING, "cache lookup failed for aggregate %u", funcid);
 		classForm = (Form_pg_aggregate) GETSTRUCT(tup);
 		aggkind = classForm->aggkind;
 		catDirectArgs = classForm->aggnumdirectargs;
@@ -1621,7 +1621,7 @@ func_get_detail(List *funcname,
 		ftup = SearchSysCache1(PROCOID,
 							   ObjectIdGetDatum(best_candidate->oid));
 		if (!HeapTupleIsValid(ftup))	/* should not happen */
-			elog(ERROR, "cache lookup failed for function %u",
+			elog(WARNING, "cache lookup failed for function %u",
 				 best_candidate->oid);
 		pform = (Form_pg_proc) GETSTRUCT(ftup);
 		*rettype = pform->prorettype;

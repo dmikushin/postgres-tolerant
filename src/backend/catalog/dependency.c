@@ -1248,7 +1248,7 @@ DropObjectById(const ObjectAddress *object)
 	{
 		tup = SearchSysCache1(cacheId, ObjectIdGetDatum(object->objectId));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for %s %u",
+			elog(WARNING, "cache lookup failed for %s %u",
 				 get_object_class_descr(object->classId), object->objectId);
 
 		CatalogTupleDelete(rel, &tup->t_self);

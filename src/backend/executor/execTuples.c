@@ -1906,7 +1906,7 @@ slot_getsomeattrs_int(TupleTableSlot *slot, int attnum)
 	Assert(attnum > 0);
 
 	if (unlikely(attnum > slot->tts_tupleDescriptor->natts))
-		elog(ERROR, "invalid attribute number %d", attnum);
+		elog(WARNING, "invalid attribute number %d", attnum);
 
 	/* Fetch as many attributes as possible from the underlying tuple. */
 	slot->tts_ops->getsomeattrs(slot, attnum);

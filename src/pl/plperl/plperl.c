@@ -1988,7 +1988,7 @@ plperl_validator(PG_FUNCTION_ARGS)
 	/* Get the new function's pg_proc entry */
 	tuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcoid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for function %u", funcoid);
+		elog(WARNING, "cache lookup failed for function %u", funcoid);
 	proc = (Form_pg_proc) GETSTRUCT(tuple);
 
 	functyptype = get_typtype(proc->prorettype);
@@ -2708,7 +2708,7 @@ compile_plperl_function(Oid fn_oid, bool is_trigger, bool is_event_trigger)
 	/* We'll need the pg_proc tuple in any case... */
 	procTup = SearchSysCache1(PROCOID, ObjectIdGetDatum(fn_oid));
 	if (!HeapTupleIsValid(procTup))
-		elog(ERROR, "cache lookup failed for function %u", fn_oid);
+		elog(WARNING, "cache lookup failed for function %u", fn_oid);
 	procStruct = (Form_pg_proc) GETSTRUCT(procTup);
 
 	/*
@@ -2808,7 +2808,7 @@ compile_plperl_function(Oid fn_oid, bool is_trigger, bool is_event_trigger)
 		langTup = SearchSysCache1(LANGOID,
 								  ObjectIdGetDatum(procStruct->prolang));
 		if (!HeapTupleIsValid(langTup))
-			elog(ERROR, "cache lookup failed for language %u",
+			elog(WARNING, "cache lookup failed for language %u",
 				 procStruct->prolang);
 		langStruct = (Form_pg_language) GETSTRUCT(langTup);
 		prodesc->lang_oid = langStruct->oid;
@@ -2825,7 +2825,7 @@ compile_plperl_function(Oid fn_oid, bool is_trigger, bool is_event_trigger)
 
 			typeTup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(rettype));
 			if (!HeapTupleIsValid(typeTup))
-				elog(ERROR, "cache lookup failed for type %u", rettype);
+				elog(WARNING, "cache lookup failed for type %u", rettype);
 			typeStruct = (Form_pg_type) GETSTRUCT(typeTup);
 
 			/* Disallow pseudotype result, except VOID or RECORD */
@@ -2874,7 +2874,7 @@ compile_plperl_function(Oid fn_oid, bool is_trigger, bool is_event_trigger)
 
 				typeTup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(argtype));
 				if (!HeapTupleIsValid(typeTup))
-					elog(ERROR, "cache lookup failed for type %u", argtype);
+					elog(WARNING, "cache lookup failed for type %u", argtype);
 				typeStruct = (Form_pg_type) GETSTRUCT(typeTup);
 
 				/* Disallow pseudotype argument, except RECORD */

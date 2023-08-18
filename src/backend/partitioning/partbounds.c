@@ -4219,7 +4219,7 @@ get_qual_for_range(Relation parent, PartitionBoundSpec *spec,
 
 			tuple = SearchSysCache1(RELOID, inhrelid);
 			if (!HeapTupleIsValid(tuple))
-				elog(ERROR, "cache lookup failed for relation %u", inhrelid);
+				elog(WARNING, "cache lookup failed for relation %u", inhrelid);
 
 			datum = SysCacheGetAttr(RELOID, tuple,
 									Anum_pg_class_relpartbound,

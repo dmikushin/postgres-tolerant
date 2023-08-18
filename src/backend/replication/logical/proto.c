@@ -461,7 +461,7 @@ logicalrep_write_typ(StringInfo out, TransactionId xid, Oid typoid)
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(basetypoid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", basetypoid);
+		elog(WARNING, "cache lookup failed for type %u", basetypoid);
 	typtup = (Form_pg_type) GETSTRUCT(tup);
 
 	/* use Oid as relation identifier */
@@ -544,7 +544,7 @@ logicalrep_write_tuple(StringInfo out, Relation rel, HeapTuple tuple, bool binar
 
 		typtup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(att->atttypid));
 		if (!HeapTupleIsValid(typtup))
-			elog(ERROR, "cache lookup failed for type %u", att->atttypid);
+			elog(WARNING, "cache lookup failed for type %u", att->atttypid);
 		typclass = (Form_pg_type) GETSTRUCT(typtup);
 
 		/*
@@ -755,7 +755,7 @@ logicalrep_write_namespace(StringInfo out, Oid nspid)
 		char	   *nspname = get_namespace_name(nspid);
 
 		if (nspname == NULL)
-			elog(ERROR, "cache lookup failed for namespace %u",
+			elog(WARNING, "cache lookup failed for namespace %u",
 				 nspid);
 
 		pq_sendstring(out, nspname);

@@ -622,7 +622,7 @@ init_sql_fcache(FunctionCallInfo fcinfo, Oid collation, bool lazyEvalOK)
 	 */
 	procedureTuple = SearchSysCache1(PROCOID, ObjectIdGetDatum(foid));
 	if (!HeapTupleIsValid(procedureTuple))
-		elog(ERROR, "cache lookup failed for function %u", foid);
+		elog(WARNING, "cache lookup failed for function %u", foid);
 	procedureStruct = (Form_pg_proc) GETSTRUCT(procedureTuple);
 
 	/*

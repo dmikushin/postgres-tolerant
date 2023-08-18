@@ -289,7 +289,7 @@ ResetSequence(Oid seq_relid)
 
 	pgstuple = SearchSysCache1(SEQRELID, ObjectIdGetDatum(seq_relid));
 	if (!HeapTupleIsValid(pgstuple))
-		elog(ERROR, "cache lookup failed for sequence %u", seq_relid);
+		elog(WARNING, "cache lookup failed for sequence %u", seq_relid);
 	pgsform = (Form_pg_sequence) GETSTRUCT(pgstuple);
 	startv = pgsform->seqstart;
 	ReleaseSysCache(pgstuple);
@@ -455,7 +455,7 @@ AlterSequence(ParseState *pstate, AlterSeqStmt *stmt)
 	seqtuple = SearchSysCacheCopy1(SEQRELID,
 								   ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(seqtuple))
-		elog(ERROR, "cache lookup failed for sequence %u",
+		elog(WARNING, "cache lookup failed for sequence %u",
 			 relid);
 
 	seqform = (Form_pg_sequence) GETSTRUCT(seqtuple);
@@ -532,7 +532,7 @@ DeleteSequenceTuple(Oid relid)
 
 	tuple = SearchSysCache1(SEQRELID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for sequence %u", relid);
+		elog(WARNING, "cache lookup failed for sequence %u", relid);
 
 	CatalogTupleDelete(rel, &tuple->t_self);
 
@@ -633,7 +633,7 @@ nextval_internal(Oid relid, bool check_permissions)
 
 	pgstuple = SearchSysCache1(SEQRELID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(pgstuple))
-		elog(ERROR, "cache lookup failed for sequence %u", relid);
+		elog(WARNING, "cache lookup failed for sequence %u", relid);
 	pgsform = (Form_pg_sequence) GETSTRUCT(pgstuple);
 	incby = pgsform->seqincrement;
 	maxv = pgsform->seqmax;
@@ -929,7 +929,7 @@ do_setval(Oid relid, int64 next, bool iscalled)
 
 	pgstuple = SearchSysCache1(SEQRELID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(pgstuple))
-		elog(ERROR, "cache lookup failed for sequence %u", relid);
+		elog(WARNING, "cache lookup failed for sequence %u", relid);
 	pgsform = (Form_pg_sequence) GETSTRUCT(pgstuple);
 	maxv = pgsform->seqmax;
 	minv = pgsform->seqmin;
@@ -1758,7 +1758,7 @@ sequence_options(Oid relid)
 
 	pgstuple = SearchSysCache1(SEQRELID, relid);
 	if (!HeapTupleIsValid(pgstuple))
-		elog(ERROR, "cache lookup failed for sequence %u", relid);
+		elog(WARNING, "cache lookup failed for sequence %u", relid);
 	pgsform = (Form_pg_sequence) GETSTRUCT(pgstuple);
 
 	/* Use makeFloat() for 64-bit integers, like gram.y does. */
@@ -1821,7 +1821,7 @@ pg_sequence_parameters(PG_FUNCTION_ARGS)
 
 	pgstuple = SearchSysCache1(SEQRELID, relid);
 	if (!HeapTupleIsValid(pgstuple))
-		elog(ERROR, "cache lookup failed for sequence %u", relid);
+		elog(WARNING, "cache lookup failed for sequence %u", relid);
 	pgsform = (Form_pg_sequence) GETSTRUCT(pgstuple);
 
 	values[0] = Int64GetDatum(pgsform->seqstart);

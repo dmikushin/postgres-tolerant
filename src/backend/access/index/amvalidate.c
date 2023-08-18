@@ -160,7 +160,7 @@ check_amproc_signature(Oid funcid, Oid restype, bool exact,
 
 	tp = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 	if (!HeapTupleIsValid(tp))
-		elog(ERROR, "cache lookup failed for function %u", funcid);
+		elog(WARNING, "cache lookup failed for function %u", funcid);
 	procform = (Form_pg_proc) GETSTRUCT(tp);
 
 	if (procform->prorettype != restype || procform->proretset ||
@@ -211,7 +211,7 @@ check_amop_signature(Oid opno, Oid restype, Oid lefttype, Oid righttype)
 
 	tp = SearchSysCache1(OPEROID, ObjectIdGetDatum(opno));
 	if (!HeapTupleIsValid(tp))	/* shouldn't happen */
-		elog(ERROR, "cache lookup failed for operator %u", opno);
+		elog(WARNING, "cache lookup failed for operator %u", opno);
 	opform = (Form_pg_operator) GETSTRUCT(tp);
 
 	if (opform->oprresult != restype || opform->oprkind != 'b' ||

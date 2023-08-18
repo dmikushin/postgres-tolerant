@@ -60,7 +60,7 @@ execCurrentOf(CurrentOfExpr *cexpr,
 	/* Fetch table name for possible use in error messages */
 	table_name = get_rel_name(table_oid);
 	if (table_name == NULL)
-		elog(ERROR, "cache lookup failed for relation %u", table_oid);
+		elog(WARNING, "cache lookup failed for relation %u", table_oid);
 
 	/* Find the cursor's portal */
 	portal = GetPortalByName(cursor_name);

@@ -936,7 +936,7 @@ dropdb(const char *dbname, bool missing_ok, bool force)
 	 */
 	tup = SearchSysCache1(DATABASEOID, ObjectIdGetDatum(db_id));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for database %u", db_id);
+		elog(WARNING, "cache lookup failed for database %u", db_id);
 
 	CatalogTupleDelete(pgdbrel, &tup->t_self);
 
@@ -1092,7 +1092,7 @@ RenameDatabase(const char *oldname, const char *newname)
 	/* rename */
 	newtup = SearchSysCacheCopy1(DATABASEOID, ObjectIdGetDatum(db_id));
 	if (!HeapTupleIsValid(newtup))
-		elog(ERROR, "cache lookup failed for database %u", db_id);
+		elog(WARNING, "cache lookup failed for database %u", db_id);
 	namestrcpy(&(((Form_pg_database) GETSTRUCT(newtup))->datname), newname);
 	CatalogTupleUpdate(rel, &newtup->t_self, newtup);
 

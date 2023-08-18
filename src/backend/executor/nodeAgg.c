@@ -3752,7 +3752,7 @@ ExecInitAgg(Agg *node, EState *estate, int eflags)
 		aggTuple = SearchSysCache1(AGGFNOID,
 								   ObjectIdGetDatum(aggref->aggfnoid));
 		if (!HeapTupleIsValid(aggTuple))
-			elog(ERROR, "cache lookup failed for aggregate %u",
+			elog(WARNING, "cache lookup failed for aggregate %u",
 				 aggref->aggfnoid);
 		aggform = (Form_pg_aggregate) GETSTRUCT(aggTuple);
 
@@ -3817,7 +3817,7 @@ ExecInitAgg(Agg *node, EState *estate, int eflags)
 			procTuple = SearchSysCache1(PROCOID,
 										ObjectIdGetDatum(aggref->aggfnoid));
 			if (!HeapTupleIsValid(procTuple))
-				elog(ERROR, "cache lookup failed for function %u",
+				elog(WARNING, "cache lookup failed for function %u",
 					 aggref->aggfnoid);
 			aggOwner = ((Form_pg_proc) GETSTRUCT(procTuple))->proowner;
 			ReleaseSysCache(procTuple);

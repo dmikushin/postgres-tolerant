@@ -919,7 +919,7 @@ load_rangetype_info(TypeCacheEntry *typentry)
 	tup = SearchSysCache1(RANGETYPE, ObjectIdGetDatum(typentry->type_id));
 	/* should not fail, since we already checked typtype ... */
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for range type %u",
+		elog(WARNING, "cache lookup failed for range type %u",
 			 typentry->type_id);
 	pg_range = (Form_pg_range) GETSTRUCT(tup);
 
@@ -966,7 +966,7 @@ load_multirangetype_info(TypeCacheEntry *typentry)
 
 	rangetypeOid = get_multirange_range(typentry->type_id);
 	if (!OidIsValid(rangetypeOid))
-		elog(ERROR, "cache lookup failed for multirange type %u",
+		elog(WARNING, "cache lookup failed for multirange type %u",
 			 typentry->type_id);
 
 	typentry->rngtype = lookup_type_cache(rangetypeOid, TYPECACHE_RANGE_INFO);
@@ -1030,7 +1030,7 @@ load_domaintype_info(TypeCacheEntry *typentry)
 
 		tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typeOid));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for type %u", typeOid);
+			elog(WARNING, "cache lookup failed for type %u", typeOid);
 		typTup = (Form_pg_type) GETSTRUCT(tup);
 
 		if (typTup->typtype != TYPTYPE_DOMAIN)

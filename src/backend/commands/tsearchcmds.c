@@ -351,7 +351,7 @@ verify_dictoptions(Oid tmplId, List *dictoptions)
 
 	tup = SearchSysCache1(TSTEMPLATEOID, ObjectIdGetDatum(tmplId));
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for text search template %u",
+		elog(WARNING, "cache lookup failed for text search template %u",
 			 tmplId);
 	tform = (Form_pg_ts_template) GETSTRUCT(tup);
 
@@ -506,7 +506,7 @@ AlterTSDictionary(AlterTSDictionaryStmt *stmt)
 	tup = SearchSysCache1(TSDICTOID, ObjectIdGetDatum(dictId));
 
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for text search dictionary %u",
+		elog(WARNING, "cache lookup failed for text search dictionary %u",
 			 dictId);
 
 	/* must be owner */
@@ -790,7 +790,7 @@ GetTSConfigTuple(List *names)
 	tup = SearchSysCache1(TSCONFIGOID, ObjectIdGetDatum(cfgId));
 
 	if (!HeapTupleIsValid(tup)) /* should not happen */
-		elog(ERROR, "cache lookup failed for text search configuration %u",
+		elog(WARNING, "cache lookup failed for text search configuration %u",
 			 cfgId);
 
 	return tup;
@@ -956,7 +956,7 @@ DefineTSConfiguration(List *names, List *parameters, ObjectAddress *copied)
 
 		tup = SearchSysCache1(TSCONFIGOID, ObjectIdGetDatum(sourceOid));
 		if (!HeapTupleIsValid(tup))
-			elog(ERROR, "cache lookup failed for text search configuration %u",
+			elog(WARNING, "cache lookup failed for text search configuration %u",
 				 sourceOid);
 
 		cfg = (Form_pg_ts_config) GETSTRUCT(tup);
@@ -1072,7 +1072,7 @@ RemoveTSConfigurationById(Oid cfgId)
 	tup = SearchSysCache1(TSCONFIGOID, ObjectIdGetDatum(cfgId));
 
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for text search dictionary %u",
+		elog(WARNING, "cache lookup failed for text search dictionary %u",
 			 cfgId);
 
 	CatalogTupleDelete(relCfg, &tup->t_self);

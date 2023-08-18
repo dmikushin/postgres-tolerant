@@ -715,7 +715,7 @@ RelationIsVisible(Oid relid)
 
 	reltup = SearchSysCache1(RELOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(reltup))
-		elog(ERROR, "cache lookup failed for relation %u", relid);
+		elog(WARNING, "cache lookup failed for relation %u", relid);
 	relform = (Form_pg_class) GETSTRUCT(reltup);
 
 	recomputeNamespacePath();
@@ -823,7 +823,7 @@ TypeIsVisible(Oid typid)
 
 	typtup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typid));
 	if (!HeapTupleIsValid(typtup))
-		elog(ERROR, "cache lookup failed for type %u", typid);
+		elog(WARNING, "cache lookup failed for type %u", typid);
 	typform = (Form_pg_type) GETSTRUCT(typtup);
 
 	recomputeNamespacePath();
@@ -1464,7 +1464,7 @@ FunctionIsVisible(Oid funcid)
 
 	proctup = SearchSysCache1(PROCOID, ObjectIdGetDatum(funcid));
 	if (!HeapTupleIsValid(proctup))
-		elog(ERROR, "cache lookup failed for function %u", funcid);
+		elog(WARNING, "cache lookup failed for function %u", funcid);
 	procform = (Form_pg_proc) GETSTRUCT(proctup);
 
 	recomputeNamespacePath();
@@ -1798,7 +1798,7 @@ OperatorIsVisible(Oid oprid)
 
 	oprtup = SearchSysCache1(OPEROID, ObjectIdGetDatum(oprid));
 	if (!HeapTupleIsValid(oprtup))
-		elog(ERROR, "cache lookup failed for operator %u", oprid);
+		elog(WARNING, "cache lookup failed for operator %u", oprid);
 	oprform = (Form_pg_operator) GETSTRUCT(oprtup);
 
 	recomputeNamespacePath();
@@ -1884,7 +1884,7 @@ OpclassIsVisible(Oid opcid)
 
 	opctup = SearchSysCache1(CLAOID, ObjectIdGetDatum(opcid));
 	if (!HeapTupleIsValid(opctup))
-		elog(ERROR, "cache lookup failed for opclass %u", opcid);
+		elog(WARNING, "cache lookup failed for opclass %u", opcid);
 	opcform = (Form_pg_opclass) GETSTRUCT(opctup);
 
 	recomputeNamespacePath();
@@ -1967,7 +1967,7 @@ OpfamilyIsVisible(Oid opfid)
 
 	opftup = SearchSysCache1(OPFAMILYOID, ObjectIdGetDatum(opfid));
 	if (!HeapTupleIsValid(opftup))
-		elog(ERROR, "cache lookup failed for opfamily %u", opfid);
+		elog(WARNING, "cache lookup failed for opfamily %u", opfid);
 	opfform = (Form_pg_opfamily) GETSTRUCT(opftup);
 
 	recomputeNamespacePath();
@@ -2099,7 +2099,7 @@ CollationIsVisible(Oid collid)
 
 	colltup = SearchSysCache1(COLLOID, ObjectIdGetDatum(collid));
 	if (!HeapTupleIsValid(colltup))
-		elog(ERROR, "cache lookup failed for collation %u", collid);
+		elog(WARNING, "cache lookup failed for collation %u", collid);
 	collform = (Form_pg_collation) GETSTRUCT(colltup);
 
 	recomputeNamespacePath();
@@ -2182,7 +2182,7 @@ ConversionIsVisible(Oid conid)
 
 	contup = SearchSysCache1(CONVOID, ObjectIdGetDatum(conid));
 	if (!HeapTupleIsValid(contup))
-		elog(ERROR, "cache lookup failed for conversion %u", conid);
+		elog(WARNING, "cache lookup failed for conversion %u", conid);
 	conform = (Form_pg_conversion) GETSTRUCT(contup);
 
 	recomputeNamespacePath();
@@ -2286,7 +2286,7 @@ StatisticsObjIsVisible(Oid relid)
 
 	stxtup = SearchSysCache1(STATEXTOID, ObjectIdGetDatum(relid));
 	if (!HeapTupleIsValid(stxtup))
-		elog(ERROR, "cache lookup failed for statistics object %u", relid);
+		elog(WARNING, "cache lookup failed for statistics object %u", relid);
 	stxform = (Form_pg_statistic_ext) GETSTRUCT(stxtup);
 
 	recomputeNamespacePath();
@@ -2409,7 +2409,7 @@ TSParserIsVisible(Oid prsId)
 
 	tup = SearchSysCache1(TSPARSEROID, ObjectIdGetDatum(prsId));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for text search parser %u", prsId);
+		elog(WARNING, "cache lookup failed for text search parser %u", prsId);
 	form = (Form_pg_ts_parser) GETSTRUCT(tup);
 
 	recomputeNamespacePath();
@@ -2535,7 +2535,7 @@ TSDictionaryIsVisible(Oid dictId)
 
 	tup = SearchSysCache1(TSDICTOID, ObjectIdGetDatum(dictId));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for text search dictionary %u",
+		elog(WARNING, "cache lookup failed for text search dictionary %u",
 			 dictId);
 	form = (Form_pg_ts_dict) GETSTRUCT(tup);
 
@@ -2662,7 +2662,7 @@ TSTemplateIsVisible(Oid tmplId)
 
 	tup = SearchSysCache1(TSTEMPLATEOID, ObjectIdGetDatum(tmplId));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for text search template %u", tmplId);
+		elog(WARNING, "cache lookup failed for text search template %u", tmplId);
 	form = (Form_pg_ts_template) GETSTRUCT(tup);
 
 	recomputeNamespacePath();
@@ -2788,7 +2788,7 @@ TSConfigIsVisible(Oid cfgid)
 
 	tup = SearchSysCache1(TSCONFIGOID, ObjectIdGetDatum(cfgid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for text search configuration %u",
+		elog(WARNING, "cache lookup failed for text search configuration %u",
 			 cfgid);
 	form = (Form_pg_ts_config) GETSTRUCT(tup);
 

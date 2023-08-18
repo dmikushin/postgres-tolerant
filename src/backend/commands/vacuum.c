@@ -805,7 +805,7 @@ expand_vacuum_rel(VacuumRelation *vrel, int options)
 		 */
 		tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for relation %u", relid);
+			elog(WARNING, "cache lookup failed for relation %u", relid);
 		classForm = (Form_pg_class) GETSTRUCT(tuple);
 
 		/*

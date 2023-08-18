@@ -534,7 +534,7 @@ mark_index_clustered(Relation rel, Oid indexOid, bool is_internal)
 		indexTuple = SearchSysCacheCopy1(INDEXRELID,
 										 ObjectIdGetDatum(thisIndexOid));
 		if (!HeapTupleIsValid(indexTuple))
-			elog(ERROR, "cache lookup failed for index %u", thisIndexOid);
+			elog(WARNING, "cache lookup failed for index %u", thisIndexOid);
 		indexForm = (Form_pg_index) GETSTRUCT(indexTuple);
 
 		/*
@@ -654,7 +654,7 @@ make_new_heap(Oid OIDOldHeap, Oid NewTableSpace, char relpersistence,
 	 */
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(OIDOldHeap));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", OIDOldHeap);
+		elog(WARNING, "cache lookup failed for relation %u", OIDOldHeap);
 	reloptions = SysCacheGetAttr(RELOID, tuple, Anum_pg_class_reloptions,
 								 &isNull);
 	if (isNull)
@@ -727,7 +727,7 @@ make_new_heap(Oid OIDOldHeap, Oid NewTableSpace, char relpersistence,
 		/* keep the existing toast table's reloptions, if any */
 		tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(toastid));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for relation %u", toastid);
+			elog(WARNING, "cache lookup failed for relation %u", toastid);
 		reloptions = SysCacheGetAttr(RELOID, tuple, Anum_pg_class_reloptions,
 									 &isNull);
 		if (isNull)
@@ -940,7 +940,7 @@ copy_table_data(Oid OIDNewHeap, Oid OIDOldHeap, Oid OIDOldIndex, bool verbose,
 
 	reltup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(OIDNewHeap));
 	if (!HeapTupleIsValid(reltup))
-		elog(ERROR, "cache lookup failed for relation %u", OIDNewHeap);
+		elog(WARNING, "cache lookup failed for relation %u", OIDNewHeap);
 	relform = (Form_pg_class) GETSTRUCT(reltup);
 
 	relform->relpages = num_pages;
@@ -1009,12 +1009,12 @@ swap_relation_files(Oid r1, Oid r2, bool target_is_pg_class,
 
 	reltup1 = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(r1));
 	if (!HeapTupleIsValid(reltup1))
-		elog(ERROR, "cache lookup failed for relation %u", r1);
+		elog(WARNING, "cache lookup failed for relation %u", r1);
 	relform1 = (Form_pg_class) GETSTRUCT(reltup1);
 
 	reltup2 = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(r2));
 	if (!HeapTupleIsValid(reltup2))
-		elog(ERROR, "cache lookup failed for relation %u", r2);
+		elog(WARNING, "cache lookup failed for relation %u", r2);
 	relform2 = (Form_pg_class) GETSTRUCT(reltup2);
 
 	relfilenode1 = relform1->relfilenode;
@@ -1443,7 +1443,7 @@ finish_heap_swap(Oid OIDOldHeap, Oid OIDNewHeap,
 
 		reltup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(OIDOldHeap));
 		if (!HeapTupleIsValid(reltup))
-			elog(ERROR, "cache lookup failed for relation %u", OIDOldHeap);
+			elog(WARNING, "cache lookup failed for relation %u", OIDOldHeap);
 		relform = (Form_pg_class) GETSTRUCT(reltup);
 
 		relform->relfrozenxid = frozenXid;

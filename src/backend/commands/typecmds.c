@@ -662,7 +662,7 @@ RemoveTypeById(Oid typeOid)
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typeOid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", typeOid);
+		elog(WARNING, "cache lookup failed for type %u", typeOid);
 
 	CatalogTupleDelete(relation, &tup->t_self);
 
@@ -1274,7 +1274,7 @@ AlterEnum(AlterEnumStmt *stmt)
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(enum_type_oid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", enum_type_oid);
+		elog(WARNING, "cache lookup failed for type %u", enum_type_oid);
 
 	/* Check it's an enum and check user has permission to ALTER the enum */
 	checkEnumOwner(tup);
@@ -2604,7 +2604,7 @@ AlterDomainDefault(List *names, Node *defaultRaw)
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(domainoid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", domainoid);
+		elog(WARNING, "cache lookup failed for type %u", domainoid);
 	typTup = (Form_pg_type) GETSTRUCT(tup);
 
 	/* Check it's a domain and check user has permission for ALTER DOMAIN */
@@ -2729,7 +2729,7 @@ AlterDomainNotNull(List *names, bool notNull)
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(domainoid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", domainoid);
+		elog(WARNING, "cache lookup failed for type %u", domainoid);
 	typTup = (Form_pg_type) GETSTRUCT(tup);
 
 	/* Check it's a domain and check user has permission for ALTER DOMAIN */
@@ -2854,7 +2854,7 @@ AlterDomainDropConstraint(List *names, const char *constrName,
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(domainoid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", domainoid);
+		elog(WARNING, "cache lookup failed for type %u", domainoid);
 
 	/* Check it's a domain and check user has permission for ALTER DOMAIN */
 	checkDomainOwner(tup);
@@ -2951,7 +2951,7 @@ AlterDomainAddConstraint(List *names, Node *newConstraint,
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(domainoid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", domainoid);
+		elog(WARNING, "cache lookup failed for type %u", domainoid);
 	typTup = (Form_pg_type) GETSTRUCT(tup);
 
 	/* Check it's a domain and check user has permission for ALTER DOMAIN */
@@ -3073,7 +3073,7 @@ AlterDomainValidateConstraint(List *names, const char *constrName)
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(domainoid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", domainoid);
+		elog(WARNING, "cache lookup failed for type %u", domainoid);
 
 	/* Check it's a domain and check user has permission for ALTER DOMAIN */
 	checkDomainOwner(tup);
@@ -3632,7 +3632,7 @@ RenameType(RenameStmt *stmt)
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(typeOid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", typeOid);
+		elog(WARNING, "cache lookup failed for type %u", typeOid);
 	typTup = (Form_pg_type) GETSTRUCT(tup);
 
 	/* check permissions on type */
@@ -3807,7 +3807,7 @@ AlterTypeOwner_oid(Oid typeOid, Oid newOwnerId, bool hasDependEntry)
 
 	tup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typeOid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", typeOid);
+		elog(WARNING, "cache lookup failed for type %u", typeOid);
 	typTup = (Form_pg_type) GETSTRUCT(tup);
 
 	/*
@@ -3853,7 +3853,7 @@ AlterTypeOwnerInternal(Oid typeOid, Oid newOwnerId)
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(typeOid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", typeOid);
+		elog(WARNING, "cache lookup failed for type %u", typeOid);
 	typTup = (Form_pg_type) GETSTRUCT(tup);
 
 	memset(repl_null, false, sizeof(repl_null));
@@ -3994,7 +3994,7 @@ AlterTypeNamespaceInternal(Oid typeOid, Oid nspOid,
 
 	tup = SearchSysCacheCopy1(TYPEOID, ObjectIdGetDatum(typeOid));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for type %u", typeOid);
+		elog(WARNING, "cache lookup failed for type %u", typeOid);
 	typform = (Form_pg_type) GETSTRUCT(tup);
 
 	oldNspOid = typform->typnamespace;
@@ -4452,7 +4452,7 @@ AlterTypeRecurse(Oid typeOid, bool isImplicitArray,
 
 			arrtup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(arrtypoid));
 			if (!HeapTupleIsValid(arrtup))
-				elog(ERROR, "cache lookup failed for type %u", arrtypoid);
+				elog(WARNING, "cache lookup failed for type %u", arrtypoid);
 
 			memset(&arrparams, 0, sizeof(arrparams));
 			arrparams.updateTypmodin = atparams->updateTypmodin;

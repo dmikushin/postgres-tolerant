@@ -150,7 +150,7 @@ lookup_ts_parser_cache(Oid prsId)
 
 		tp = SearchSysCache1(TSPARSEROID, ObjectIdGetDatum(prsId));
 		if (!HeapTupleIsValid(tp))
-			elog(ERROR, "cache lookup failed for text search parser %u",
+			elog(WARNING, "cache lookup failed for text search parser %u",
 				 prsId);
 		prs = (Form_pg_ts_parser) GETSTRUCT(tp);
 
@@ -252,7 +252,7 @@ lookup_ts_dictionary_cache(Oid dictId)
 
 		tpdict = SearchSysCache1(TSDICTOID, ObjectIdGetDatum(dictId));
 		if (!HeapTupleIsValid(tpdict))
-			elog(ERROR, "cache lookup failed for text search dictionary %u",
+			elog(WARNING, "cache lookup failed for text search dictionary %u",
 				 dictId);
 		dict = (Form_pg_ts_dict) GETSTRUCT(tpdict);
 
@@ -268,7 +268,7 @@ lookup_ts_dictionary_cache(Oid dictId)
 		tptmpl = SearchSysCache1(TSTEMPLATEOID,
 								 ObjectIdGetDatum(dict->dicttemplate));
 		if (!HeapTupleIsValid(tptmpl))
-			elog(ERROR, "cache lookup failed for text search template %u",
+			elog(WARNING, "cache lookup failed for text search template %u",
 				 dict->dicttemplate);
 		template = (Form_pg_ts_template) GETSTRUCT(tptmpl);
 
@@ -422,7 +422,7 @@ lookup_ts_config_cache(Oid cfgId)
 
 		tp = SearchSysCache1(TSCONFIGOID, ObjectIdGetDatum(cfgId));
 		if (!HeapTupleIsValid(tp))
-			elog(ERROR, "cache lookup failed for text search configuration %u",
+			elog(WARNING, "cache lookup failed for text search configuration %u",
 				 cfgId);
 		cfg = (Form_pg_ts_config) GETSTRUCT(tp);
 
@@ -623,7 +623,7 @@ check_TSCurrentConfig(char **newval, void **extra, GucSource source)
 		 */
 		tuple = SearchSysCache1(TSCONFIGOID, ObjectIdGetDatum(cfgId));
 		if (!HeapTupleIsValid(tuple))
-			elog(ERROR, "cache lookup failed for text search configuration %u",
+			elog(WARNING, "cache lookup failed for text search configuration %u",
 				 cfgId);
 		cfg = (Form_pg_ts_config) GETSTRUCT(tuple);
 

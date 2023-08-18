@@ -360,7 +360,7 @@ has_subclass(Oid relationId)
 
 	tuple = SearchSysCache1(RELOID, ObjectIdGetDatum(relationId));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for relation %u", relationId);
+		elog(WARNING, "cache lookup failed for relation %u", relationId);
 
 	result = ((Form_pg_class) GETSTRUCT(tuple))->relhassubclass;
 	ReleaseSysCache(tuple);

@@ -3210,7 +3210,7 @@ get_rte_attribute_is_dropped(RangeTblEntry *rte, AttrNumber attnum)
 									 ObjectIdGetDatum(rte->relid),
 									 Int16GetDatum(attnum));
 				if (!HeapTupleIsValid(tp))	/* shouldn't happen */
-					elog(ERROR, "cache lookup failed for attribute %d of relation %u",
+					elog(WARNING, "cache lookup failed for attribute %d of relation %u",
 						 attnum, rte->relid);
 				att_tup = (Form_pg_attribute) GETSTRUCT(tp);
 				result = att_tup->attisdropped;
@@ -3440,7 +3440,7 @@ attnumAttName(Relation rd, int attid)
 		return &sysatt->attname;
 	}
 	if (attid > rd->rd_att->natts)
-		elog(ERROR, "invalid attribute number %d", attid);
+		elog(WARNING, "invalid attribute number %d", attid);
 	return &TupleDescAttr(rd->rd_att, attid - 1)->attname;
 }
 
@@ -3462,7 +3462,7 @@ attnumTypeId(Relation rd, int attid)
 		return sysatt->atttypid;
 	}
 	if (attid > rd->rd_att->natts)
-		elog(ERROR, "invalid attribute number %d", attid);
+		elog(WARNING, "invalid attribute number %d", attid);
 	return TupleDescAttr(rd->rd_att, attid - 1)->atttypid;
 }
 
@@ -3480,7 +3480,7 @@ attnumCollationId(Relation rd, int attid)
 		return InvalidOid;
 	}
 	if (attid > rd->rd_att->natts)
-		elog(ERROR, "invalid attribute number %d", attid);
+		elog(WARNING, "invalid attribute number %d", attid);
 	return TupleDescAttr(rd->rd_att, attid - 1)->attcollation;
 }
 

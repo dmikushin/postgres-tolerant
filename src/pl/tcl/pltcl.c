@@ -624,7 +624,7 @@ call_pltcl_start_proc(Oid prolang, bool pltrusted)
 	/* Get the function's pg_proc entry */
 	procTup = SearchSysCache1(PROCOID, ObjectIdGetDatum(procOid));
 	if (!HeapTupleIsValid(procTup))
-		elog(ERROR, "cache lookup failed for function %u", procOid);
+		elog(WARNING, "cache lookup failed for function %u", procOid);
 	procStruct = (Form_pg_proc) GETSTRUCT(procTup);
 
 	/* It must be same language as the function we're currently calling */
@@ -1398,7 +1398,7 @@ compile_pltcl_function(Oid fn_oid, Oid tgreloid,
 	/* We'll need the pg_proc tuple in any case... */
 	procTup = SearchSysCache1(PROCOID, ObjectIdGetDatum(fn_oid));
 	if (!HeapTupleIsValid(procTup))
-		elog(ERROR, "cache lookup failed for function %u", fn_oid);
+		elog(WARNING, "cache lookup failed for function %u", fn_oid);
 	procStruct = (Form_pg_proc) GETSTRUCT(procTup);
 
 	/*
@@ -1520,7 +1520,7 @@ compile_pltcl_function(Oid fn_oid, Oid tgreloid,
 
 			typeTup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(rettype));
 			if (!HeapTupleIsValid(typeTup))
-				elog(ERROR, "cache lookup failed for type %u", rettype);
+				elog(WARNING, "cache lookup failed for type %u", rettype);
 			typeStruct = (Form_pg_type) GETSTRUCT(typeTup);
 
 			/* Disallow pseudotype result, except VOID and RECORD */
@@ -1568,7 +1568,7 @@ compile_pltcl_function(Oid fn_oid, Oid tgreloid,
 
 				typeTup = SearchSysCache1(TYPEOID, ObjectIdGetDatum(argtype));
 				if (!HeapTupleIsValid(typeTup))
-					elog(ERROR, "cache lookup failed for type %u", argtype);
+					elog(WARNING, "cache lookup failed for type %u", argtype);
 				typeStruct = (Form_pg_type) GETSTRUCT(typeTup);
 
 				/* Disallow pseudotype argument, except RECORD */

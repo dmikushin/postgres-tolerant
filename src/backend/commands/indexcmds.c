@@ -242,7 +242,7 @@ CheckIndexCompatible(Oid oldId,
 	/* Get the soon-obsolete pg_index tuple. */
 	tuple = SearchSysCache1(INDEXRELID, ObjectIdGetDatum(oldId));
 	if (!HeapTupleIsValid(tuple))
-		elog(ERROR, "cache lookup failed for index %u", oldId);
+		elog(WARNING, "cache lookup failed for index %u", oldId);
 	indexForm = (Form_pg_index) GETSTRUCT(tuple);
 
 	/*
@@ -1387,7 +1387,7 @@ DefineIndex(Oid relationId,
 				tup = SearchSysCache1(INDEXRELID,
 									  ObjectIdGetDatum(indexRelationId));
 				if (!HeapTupleIsValid(tup))
-					elog(ERROR, "cache lookup failed for index %u",
+					elog(WARNING, "cache lookup failed for index %u",
 						 indexRelationId);
 				newtup = heap_copytuple(tup);
 				((Form_pg_index) GETSTRUCT(newtup))->indisvalid = false;
@@ -1933,7 +1933,7 @@ ComputeIndexAttrs(IndexInfo *indexInfo,
 				opftuple = SearchSysCache1(OPFAMILYOID,
 										   ObjectIdGetDatum(opfamily));
 				if (!HeapTupleIsValid(opftuple))
-					elog(ERROR, "cache lookup failed for opfamily %u",
+					elog(WARNING, "cache lookup failed for opfamily %u",
 						 opfamily);
 				opfform = (Form_pg_opfamily) GETSTRUCT(opftuple);
 
@@ -4158,7 +4158,7 @@ update_relispartition(Oid relationId, bool newval)
 	classRel = table_open(RelationRelationId, RowExclusiveLock);
 	tup = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relationId));
 	if (!HeapTupleIsValid(tup))
-		elog(ERROR, "cache lookup failed for relation %u", relationId);
+		elog(WARNING, "cache lookup failed for relation %u", relationId);
 	Assert(((Form_pg_class) GETSTRUCT(tup))->relispartition != newval);
 	((Form_pg_class) GETSTRUCT(tup))->relispartition = newval;
 	CatalogTupleUpdate(classRel, &tup->t_self, tup);
