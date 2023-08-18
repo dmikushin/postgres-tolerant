@@ -95,11 +95,16 @@ pglz_decompress_datum(const struct varlena *value)
 							  VARDATA(result),
 							  VARDATA_COMPRESSED_GET_EXTSIZE(value), true);
 	if (rawsize < 0)
-		ereport(ERROR,
+	{
+		ereport(WARNING,
 				(errcode(ERRCODE_DATA_CORRUPTED),
 				 errmsg_internal("compressed pglz data is corrupt")));
-
-	SET_VARSIZE(result, rawsize + VARHDRSZ);
+		SET_VARSIZE(result, VARHDRSZ);
+	}
+	else
+	{
+		SET_VARSIZE(result, rawsize + VARHDRSZ);
+	}
 
 	return result;
 }
@@ -199,13 +204,16 @@ lz4_decompress_datum(const struct varlena *value)
 								  VARSIZE(value) - VARHDRSZ_COMPRESSED,
 								  VARDATA_COMPRESSED_GET_EXTSIZE(value));
 	if (rawsize < 0)
-		ereport(ERROR,
+	{
+		ereport(WARNING,
 				(errcode(ERRCODE_DATA_CORRUPTED),
 				 errmsg_internal("compressed lz4 data is corrupt")));
-
-
-	SET_VARSIZE(result, rawsize + VARHDRSZ);
-
+		SET_VARSIZE(result, VARHDRSZ);
+	}
+	else
+	{
+		SET_VARSIZE(result, rawsize + VARHDRSZ);
+	}
 	return result;
 #endif
 }
@@ -237,11 +245,16 @@ lz4_decompress_datum_slice(const struct varlena *value, int32 slicelength)
 										  slicelength,
 										  slicelength);
 	if (rawsize < 0)
-		ereport(ERROR,
+	{
+		ereport(WARNING,
 				(errcode(ERRCODE_DATA_CORRUPTED),
 				 errmsg_internal("compressed lz4 data is corrupt")));
-
-	SET_VARSIZE(result, rawsize + VARHDRSZ);
+		SET_VARSIZE(result, VARHDRSZ);
+	}
+	else
+	{
+		SET_VARSIZE(result, rawsize + VARHDRSZ);
+	}
 
 	return result;
 #endif

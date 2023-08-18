@@ -781,7 +781,7 @@ heap_fetch_toast_slice(Relation toastrel, Oid valueid, int32 attrsize,
 	 * Final checks that we successfully fetched the datum
 	 */
 	if (expectedchunk != (endchunk + 1))
-		ereport(ERROR,
+		ereport(WARNING,
 				(errcode(ERRCODE_DATA_CORRUPTED),
 				 errmsg_internal("missing chunk number %d for toast value %u in %s",
 								 expectedchunk, valueid,

@@ -445,13 +445,16 @@ RelationCopyStorage(SMgrRelation src, SMgrRelation dst,
 
 		if (!PageIsVerifiedExtended(page, blkno,
 									PIV_LOG_WARNING | PIV_REPORT_STAT))
-			ereport(ERROR,
+		{
+			ereport(WARNING,
 					(errcode(ERRCODE_DATA_CORRUPTED),
 					 errmsg("invalid page in block %u of relation %s",
 							blkno,
 							relpathbackend(src->smgr_rnode.node,
 										   src->smgr_rnode.backend,
 										   forkNum))));
+			continue;
+		}
 
 		/*
 		 * WAL-log the copied page. Unfortunately we don't know what kind of a
